@@ -22,6 +22,7 @@
 		}
 	});
  
+	/*
 	async function sendMessage() {
 		try {
 			if (!newMessage) return;
@@ -32,6 +33,7 @@
 				},
 				body: JSON.stringify({ message: newMessage })
 			});
+
 			const data = await response.json();
 			messages = [...messages, { role: 'user', content: newMessage }];
 			newMessage = '';
@@ -40,6 +42,165 @@
 			console.error(error);
 		}
 	}
+	*/
+
+/*
+	async function sendMessage() {
+		try {
+			if (!newMessage) return;
+*/
+			/*
+			const response = await fetch('http://localhost:8000/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ message: newMessage })
+			});
+*/
+			//const stream = new ReadableStream(getSomeSource());
+/*
+			const response = await fetch('http://localhost:8000/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ message: newMessage })
+			});
+
+			for await (const chunk of response.body) {
+				// Do something with each chunk
+				// Here we just accumulate the size of the response.
+				//total += chunk.length;
+			}
+			*/
+/*
+			const reader = response.body.getReader();
+			let chunks = '';
+			let fullBotMessage = '';
+			//do (await reader.read()).value
+			//while (reader.read().done === false);
+
+			let d = await reader.read();
+
+			reader.read().then(({ done, value }) => {
+				if (done) {
+					console.log('Stream complete');
+					return;
+				}
+				// value for fetch streams is a Uint8Array
+				const chunk = new TextDecoder("utf-8").decode(value);
+				console.log(chunk);
+				// Do something with each 'chunk'
+			});
+*/				
+/*
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+
+
+
+				chunks += new TextDecoder("utf-8").decode(value);
+
+				// Let's assume the Python server returns complete JSON objects separated by a line break
+				let jsonChunks = chunks.split('\n\n').filter(Boolean);
+
+				let counter = 0;
+				for (let chunk of jsonChunks) {
+					let data;
+					try {
+						data = JSON.parse(chunk);
+					} catch (error) {
+						// If we can't parse chunk as JSON, it might be incomplete. We leave it in chunks for the next iteration.
+						chunks = chunk;
+						break;
+					}
+
+					const botMessage = data.choices[0].delta.content;
+
+					if (botMessage) {
+						fullBotMessage += botMessage;
+					}
+
+					//console.log('Conversation ended');
+					//messages = [...messages, { role: 'user', content: newMessage }];
+					//newMessage = '';
+					if (counter == 0) {
+						messages = [...messages,
+							{ role: 'user', content: newMessage },
+							{ role: 'bot', content: fullBotMessage }
+						];
+						newMessage = '';
+					} else {
+						messages[messages.length - 1].content += botMessage;
+					}
+					//messages = [...messages, { role: 'bot', content: fullBotMessage }];
+					//console.log(fullBotMessage);
+					//fullBotMessage = '';
+					counter = counter + 1;
+					if (data.choices[0].finish_reason === 'stop') {
+						break;
+					}
+				}
+			}
+			*/
+			/*
+		} catch (error) {
+			console.error(error);
+		}
+	}
+*/
+
+	async function sendMessage() {
+
+		try {
+
+			if (!newMessage) return;
+
+			const response = await fetch('http://localhost:8000/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ message: newMessage })
+			});
+		
+			const reader = response.body.getReader();
+			let chunks = '';
+		
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+
+				chunks += new TextDecoder("utf-8").decode(value);
+				const endOfMessageIndex = chunks.indexOf('\n\n');
+			
+				if (endOfMessageIndex !== -1) {
+					const messageString = chunks.slice(0, endOfMessageIndex);
+					chunks = chunks.slice(endOfMessageIndex + 2);
+				
+					const data = JSON.parse(messageString);
+					const botMessage = data.choices[0].delta.content;
+				
+					if (botMessage) {
+						messages = [...messages, { role: 'user', content: newMessage }];
+						newMessage = '';
+						messages = [...messages, { role: 'bot', content: botMessage }];
+						console.log(botMessage);
+					}
+				
+					if (data.choices[0].finish_reason === 'stop') {
+						console.log('Conversation ended');
+						break;
+					}
+				}
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 </script>
 
 <style>
