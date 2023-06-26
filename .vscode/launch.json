@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python: FastAPI",
+			"name": "mbotserv",
 			"type": "python",
 			"request": "launch",
 			"module": "uvicorn",
@@ -15,10 +15,11 @@
 			],
 			"jinja": true,
 			"justMyCode": true,
-			"cwd": "${workspaceFolder}/backend"
+			"cwd": "${workspaceFolder}/backend",
+			"envFile": "${workspaceFolder}/.env"
 		},
 		{
-			"name": "Launch Vite App",
+			"name": "mbotclient-vite",
 			"type": "node",
 			"request": "launch",
 			"runtimeExecutable": "npm",
@@ -29,12 +30,29 @@
 			"cwd": "${workspaceFolder}/vite-app",
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen"
+		},{
+			"name": "mbotclient-chrome",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:5173",
+			"webRoot": "${workspaceFolder}/vite-app/src"
 		}
+		/*{
+			"name": "mbotclient-edge",
+			"type": "vscode-edge-devtools.debug",
+			"request": "launch",
+			"url": "http://localhost:4000",
+			"webRoot": "${workspaceFolder}/vite-app/src",
+			"sourceMaps": true,
+			"sourceMapPathOverrides": {
+				"webpack:///src/*": "${webRoot}/src/*"
+			}
+		},*/
 	],
 	"compounds": [
 		{
 			"name": "Launch FastAPI and Vite",
-			"configurations": ["Python: FastAPI", "Launch Vite App"]
+			"configurations": ["mbotserv", "mbotclient-vite", "mbotclient-chrome"]
 		}
 	]
 }

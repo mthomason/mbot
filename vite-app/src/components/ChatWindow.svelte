@@ -6,39 +6,127 @@
 	let newMessage = '';
 
 	onMount(async () => {
-		const response = await fetch('http://localhost:8000/chat', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ message: 'Hello!' })
-		});
-		const data = await response.json();
-		messages.push({ role: 'bot', content: data.response });
+		try {
+			const response = await fetch('http://localhost:8000/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ message: 'Hello!' })
+			});
+			const data = await response.json();
+			messages = [...messages, { role: 'bot', content: data.response }];
+			// messages.push({ role: 'bot', content: data.response });
+		} catch (error) {
+			console.error(error);
+		}
 	});
  
 	async function sendMessage() {
-		const response = await fetch('http://localhost:8000/chat', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ message: newMessage })
-		});
-		const data = await response.json();
-		messages.push({ role: 'user', content: newMessage });
-		newMessage = '';
-		messages.push({ role: 'bot', content: data.response });
+		try {
+			if (!newMessage) return;
+			const response = await fetch('http://localhost:8000/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ message: newMessage })
+			});
+			const data = await response.json();
+			messages = [...messages, { role: 'user', content: newMessage }];
+			newMessage = '';
+			messages = [...messages, { role: 'bot', content: data.response }];
+		} catch (error) {
+			console.error(error);
+		}
 	}
 </script>
 
+<style>
+	:root {
+		--color-primary: #4CAF50;
+		--color-secondary: #FFC107;
+		--color-dark: #333;
+		--color-light: #FFF;
+		--spacing-small: 10px;
+		--spacing-medium: 20px;
+		--spacing-large: 30px;
+		--radius-small: 5px;
+	}
+	
+	#chat-window {
+		display: flex;
+		flex-direction: column;
+		max-width: 800px;
+		height: 50vh; /*was 70vh; */
+		margin: 0 auto var(--spacing-small) auto;
+		padding: var(--spacing-medium);
+		border-radius: var(--radius-small);
+		background-color: var(--color-dark);
+		color: var(--color-light);
+		overflow: auto;
+	}
+	
+	#message-input {
+		display: flex;
+		flex-direction: row;
+	}
+
+	.bot, .user {
+		max-width: 70%;
+		padding: var(--spacing-small);
+		margin-bottom: var(--spacing-small);
+		border-radius: var(--radius-small);
+		color: var(--color-dark);
+	}
+
+	.bot {
+		align-self: flex-start;
+		background-color: var(--color-light);
+	}
+	
+	.user {
+		align-self: flex-end;
+		background-color: var(--color-secondary);
+		color: var(--color-dark);
+	}
+
+	textarea {
+		padding: var(--spacing-small);
+		border: none;
+		border-radius: var(--radius-small);
+		resize: none;
+		overflow: auto;
+		min-height: 5vh; /* Set minimum height */
+		max-height: 20vh; /* Set maximum height */
+		flex: auto;
+	}
+	
+	button {
+		padding: var(--spacing-small);
+		border: none;
+		border-radius: var(--radius-small);
+		background-color: var(--color-primary);
+		color: var(--color-light);
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+		margin: 0 var(--spacing-small) 0 var(--spacing-small);
+	}
+	
+	button:hover {
+		background-color: darken(var(--color-primary), 10%);
+	}
+</style>
+
 <div id="chat-window">
-	{#each messages as message (message)}
-		<div class={message.role}>
-			<p>{message.content}</p>
-		</div>
+	{#each messages as message, index (index)}
+	<div class={message.role}>
+		<p>{message.content}</p>
+	</div>
 	{/each}
 </div>
 
-<input bind:value={newMessage} type="text">
-<button on:click={sendMessage}>Send</button>
+<div id="message-input">
+	<textarea bind:value={newMessage}></textarea>
+	<button on:click={sendMessage}>Send</button>
+</div>
