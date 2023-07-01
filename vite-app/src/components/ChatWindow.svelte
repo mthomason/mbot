@@ -5,6 +5,7 @@
 	let messages = [];
 	let newMessage = "";
 
+	/*
 	onMount(async () => {
 		try {
 			const response = await fetch("http://localhost:8000/chat", {
@@ -18,6 +19,7 @@
 			console.error(error);
 		}
 	});
+	*/
 
 	async function sendChatMessageInitial() {
 		try {
@@ -36,36 +38,139 @@
 		}
 	}
 
-	async function sendChatMessageAsync() {
+	/**
+	 * @param {string} message
+	 */
+	async function postChatMessage(message) {
+		if (!message) throw new Error("Message is empty");
+		if (message.length === 0) throw new Error("Message is empty");
+
+		const response = await fetch("http://localhost:8000/chat", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ message: message }),
+			});
+		return response;
+	}
+
+	// Add the 'messages' variable with the new user or bot messages.
+	/**
+	 * @param {string} message
+	 * @param {string} role
+	 */
+	function addChatMessages(message, role) {
+		messages = [...messages, { role: role, content: message }, ];
+	}
+
+	// Update the 'messages' variable with the new user or bot messages.
+	/**
+	 ** @param {string} message
+	 ** @param {string} role
+	 **/
+	function updateChatMessages(message, role) {
+		if (messages[messages.length - 1].role !== role) {
+			throw new Error("The last message is not from the same role");
+		}
+		messages[messages.length - 1].content += message;
+	}
+
+	// Decode chunks of data received from the server and find the end of each message.
+	/**
+     * @param {ReadableStreamDefaultReader<Uint8Array>} reader
+     */
+	async function decodeChunks(reader) {
+		let chunks = "";
+		let utf8Decoder = new TextDecoder("utf-8");
+
+		while (true) {
+			const { done, value } = await reader.read();
+			if (done) break;
+
+			chunks += utf8Decoder.decode(value);
+			const endOfMessageIndex = chunks.indexOf("\n\n");
+
+			if (endOfMessageIndex !== -1) {
+				const messageString = chunks.slice(0, endOfMessageIndex);
+				chunks = chunks.slice(endOfMessageIndex + 2);
+
+				return { chunks, messageString };
+			}
+		}
+	}
+	
+	// Process the data in each message, including updating the 'messages' variable and handling the 'stop' finish reason.
+	/**
+     * @param {number} index
+     * @param {string} token
+     */
+	function processChatMessageData(index, token) {
+		//const botMessagePart = data.choices[0].delta.content;
+		console.log(index, token);
+		if (index === 0) {
+			addChatMessages(token, "bot");
+		} else {
+			updateChatMessages(token, "bot");
+		}
+	}
+
+	// The refactored sendChatMessageAsync function
+	async function sendChatMessageAsync2() {
 		try {
 			if (!newMessage) return;
 
+			const response = await postChatMessage(newMessage);
+
+			addChatMessages(newMessage, "user");
+			newMessage = "";
+
+			const reader = response.body.getReader();
+
+			let i = 0;
+			while (true) {
+				const { chunks, messageString } = await decodeChunks(reader);
+
+				if (messageString) {
+					const data = JSON.parse(messageString);
+					processChatMessageData(i, data.choices[0].delta.content);
+					if (data.choices[0].finish_reason === "stop") {
+						break;
+					}
+					i += 1;
+					//break;
+				} else {
+					break;
+				}
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	async function sendChatMessageAsync() {
+		try {
+			if (!newMessage) return;
+			/*
 			const response = await fetch("http://localhost:8000/chat", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ message: newMessage }),
 			});
-
+			*/
+			const response = await postChatMessage(newMessage);
 			messages = [...messages, { role: "user", content: newMessage }];
 			newMessage = "";
-
 			const reader = response.body.getReader();
 			let chunks = "";
-
 			while (true) {
 				const { done, value } = await reader.read();
 				if (done) break;
-
 				chunks += new TextDecoder("utf-8").decode(value);
 				const endOfMessageIndex = chunks.indexOf("\n\n");
-
 				if (endOfMessageIndex !== -1) {
 					const messageString = chunks.slice(0, endOfMessageIndex);
 					chunks = chunks.slice(endOfMessageIndex + 2);
-
 					const data = JSON.parse(messageString);
 					const botMessage = data.choices[0].delta.content;
-
 					if (botMessage) {
 						if (messages[messages.length - 1].role === "user") {
 							messages = [
@@ -77,7 +182,6 @@
 						}
 						console.log(botMessage);
 					}
-
 					if (data.choices[0].finish_reason === "stop") {
 						console.log("Conversation ended");
 						break;
@@ -89,6 +193,14 @@
 		}
 	}
 
+	/*
+	async function decodeChunk(value) {
+		let chunk = new TextDecoder("utf-8").decode(value);
+		if (chunk.indexOf("\n\n") !== -1) {
+
+		}
+	}
+	*/
 	async function sendChatMessageInitialAsync() {
 		try {
 			const response = await fetch("http://localhost:8000/chat", {
