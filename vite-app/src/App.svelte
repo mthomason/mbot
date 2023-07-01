@@ -3,8 +3,12 @@
 	import viteLogo from '/vite.svg'
 	import Counter from './lib/Counter.svelte'
 	import ChatWindow from './components/ChatWindow.svelte';
+	import NavBar from './components/NavBar.svelte';
 </script>
 
+<header class="bg-secondary p-4 flex justify-between items-center text-white">
+	<NavBar />
+</header>
 <main>
 	<!--div>
 		<a href="https://vitejs.dev" target="_blank" rel="noreferrer">
@@ -14,7 +18,7 @@
 			<img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
 		</a>
 	</div-->
-	<h1>mbot</h1>
+	<!--h1>mbot</h1-->
 	<!--div class="card"><Counter /></div-->
 	<!--p>
 		Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
