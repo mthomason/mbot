@@ -1,57 +1,81 @@
 <!-- /frontend/src/components/ChatWindow.svelte -->
 
 <script>
+	
+
 	import { onMount } from "svelte";
-	let messages = [];
-	let newMessage = "";
 
-	/*
-	onMount(async () => {
-		try {
-			const response = await fetch("http://localhost:8000/chat", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ message: "Hello!" }),
-			});
-			const data = await response.json();
-			messages = [...messages, { role: "bot", content: data.response }];
-		} catch (error) {
-			console.error(error);
-		}
-	});
-	*/
-
-	async function sendChatMessageInitial() {
-		try {
-			const response = await fetch("http://localhost:8000/chat", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ message: "Hello!" }),
-			});
-			const data = await response.json();
-			messages = [...messages,
-							{ role: "user", content: "Hello!" },
-							{ role: "bot", content: data.response },
-						];
-		} catch (error) {
-			console.error(error);
-		}
+	class ChatClient {
+	constructor() {
+		this.messages = [];
+		this.newMessage = "";
 	}
 
 	/**
+	 * Post a message to the chat server.
 	 * @param {string} message
 	 */
-	async function postChatMessage(message) {
-		if (!message) throw new Error("Message is empty");
-		if (message.length === 0) throw new Error("Message is empty");
+	async postChatMessage(message) {
+		if (!this.newMessage) throw new Error("Message is empty");
+		if (this.newMessage.length === 0) throw new Error("Message is empty");
 
 		const response = await fetch("http://localhost:8000/chat", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ message: message }),
+				body: JSON.stringify({ message: this.newMessage }),
 			});
 		return response;
 	}
+
+	/**
+	 * Send a message to the chat server and process the response.
+	 */
+	/*
+	async sendChatMessageAsync() {
+		try {
+			if (!this.newMessage) return;
+
+			const response = await this.postChatMessage(this.newMessage);
+			this.messages = [...this.messages, { role: "user", content: this.newMessage }];
+			//this.newMessage = "";
+			const reader = response.body.getReader();
+			let chunks = "";
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+				chunks += new TextDecoder("utf-8").decode(value);
+				const endOfMessageIndex = chunks.indexOf("\n\n");
+				if (endOfMessageIndex !== -1) {
+					const messageString = chunks.slice(0, endOfMessageIndex);
+					chunks = chunks.slice(endOfMessageIndex + 2);
+					const data = JSON.parse(messageString);
+					const botMessage = data.choices[0].delta.content;
+					if (botMessage) {
+						if (this.messages[this.messages.length - 1].role === "user") {
+							this.messages = [
+								...this.messages,
+								{ role: "bot", content: botMessage },
+							];
+						} else {
+							this.messages[this.messages.length - 1].content += botMessage;
+						}
+						console.log(botMessage);
+					}
+					if (data.choices[0].finish_reason === "stop") {
+						console.log("Conversation ended");
+						break;
+					}
+				}
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	}
+	*/
+
+}
+	
+	let chatClient = new ChatClient();
 
 	// Add the 'messages' variable with the new user or bot messages.
 	/**
@@ -59,7 +83,7 @@
 	 * @param {string} role
 	 */
 	function addChatMessages(message, role) {
-		messages = [...messages, { role: role, content: message }, ];
+		chatClient.messages = [...chatClient.messages, { role: role, content: message }, ];
 	}
 
 	// Update the 'messages' variable with the new user or bot messages.
@@ -68,10 +92,10 @@
 	 ** @param {string} role
 	 **/
 	function updateChatMessages(message, role) {
-		if (messages[messages.length - 1].role !== role) {
+		if (chatClient.messages[chatClient.messages.length - 1].role !== role) {
 			throw new Error("The last message is not from the same role");
 		}
-		messages[messages.length - 1].content += message;
+		chatClient.messages[chatClient.messages.length - 1].content += message;
 	}
 
 	// Decode chunks of data received from the server and find the end of each message.
@@ -104,8 +128,6 @@
      * @param {string} token
      */
 	function processChatMessageData(index, token) {
-		//const botMessagePart = data.choices[0].delta.content;
-		console.log(index, token);
 		if (index === 0) {
 			addChatMessages(token, "bot");
 		} else {
@@ -113,52 +135,13 @@
 		}
 	}
 
-	// The refactored sendChatMessageAsync function
-	async function sendChatMessageAsync2() {
-		try {
-			if (!newMessage) return;
-
-			const response = await postChatMessage(newMessage);
-
-			addChatMessages(newMessage, "user");
-			newMessage = "";
-
-			const reader = response.body.getReader();
-
-			let i = 0;
-			while (true) {
-				const { chunks, messageString } = await decodeChunks(reader);
-
-				if (messageString) {
-					const data = JSON.parse(messageString);
-					processChatMessageData(i, data.choices[0].delta.content);
-					if (data.choices[0].finish_reason === "stop") {
-						break;
-					}
-					i += 1;
-					//break;
-				} else {
-					break;
-				}
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
 	async function sendChatMessageAsync() {
 		try {
-			if (!newMessage) return;
-			/*
-			const response = await fetch("http://localhost:8000/chat", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ message: newMessage }),
-			});
-			*/
-			const response = await postChatMessage(newMessage);
-			messages = [...messages, { role: "user", content: newMessage }];
-			newMessage = "";
+			if (!chatClient.newMessage) return;
+
+			const response = await chatClient.postChatMessage(chatClient.newMessage);
+			chatClient.messages = [...chatClient.messages, { role: "user", content: chatClient.newMessage }];
+			chatClient.newMessage = "";
 			const reader = response.body.getReader();
 			let chunks = "";
 			while (true) {
@@ -172,13 +155,13 @@
 					const data = JSON.parse(messageString);
 					const botMessage = data.choices[0].delta.content;
 					if (botMessage) {
-						if (messages[messages.length - 1].role === "user") {
-							messages = [
-								...messages,
+						if (chatClient.messages[chatClient.messages.length - 1].role === "user") {
+							chatClient.messages = [
+								...chatClient.messages,
 								{ role: "bot", content: botMessage },
 							];
 						} else {
-							messages[messages.length - 1].content += botMessage;
+							chatClient.messages[chatClient.messages.length - 1].content += botMessage;
 						}
 						console.log(botMessage);
 					}
@@ -193,30 +176,10 @@
 		}
 	}
 
-	/*
-	async function decodeChunk(value) {
-		let chunk = new TextDecoder("utf-8").decode(value);
-		if (chunk.indexOf("\n\n") !== -1) {
-
-		}
-	}
-	*/
-	async function sendChatMessageInitialAsync() {
-		try {
-			const response = await fetch("http://localhost:8000/chat", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ message: "Hello!" }),
-			});
-			
-		} catch (error) {
-			console.error(error);
-		}
-	}
 </script>
 
 <div id="chat-window">
-	{#each messages as message, index (index)}
+	{#each chatClient.messages as message, index (index)}
 		<div class={message.role}>
 			<p>{message.content}</p>
 		</div>
@@ -224,8 +187,10 @@
 </div>
 
 <div id="message-input">
-	<textarea bind:value={newMessage} />
-	<button on:click={sendChatMessageAsync}>Send</button>
+	<textarea bind:value={chatClient.newMessage} />
+	<button on:click={async () => {
+		await sendChatMessageAsync();
+	}}>Send</button>
 </div>
 
 <style>
