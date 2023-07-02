@@ -64,8 +64,11 @@ async def achat_endpoint(chat_message: ChatMessage):
 		# Since FastAPI doesn't support Server-Sent Events (SSE) natively,
 		# we'll convert the response to a string and yield each chunk as it arrives.
 		async def event_stream():
+			i: int = 0
 			for chunk in response:
+				print(f"Chunk {i}: `{chunk.choices[0].delta.content}`")
 				yield str(chunk).join(("\n", "\n"))
+				i += 1
 
 		return StreamingResponse(event_stream())
 
