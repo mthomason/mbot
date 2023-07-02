@@ -26,9 +26,15 @@
 		}
 	}
 
-	async function sendChatMessageAsync() {
+	/**
+	 * Send a message to the chat server and receive a response.
+	 * @param {Event} event
+	 */
+	async function sendChatMessageAsync(event) {
 		try {
 			if (!chatClient.newMessage) return;
+
+			event.preventDefault(); // prevent form from refreshing the page
 
 			const response = await chatClient.postChatMessage(chatClient.newMessage);
 			chatClient.messages = [...chatClient.messages, { role: "user", content: chatClient.newMessage }];
@@ -68,8 +74,36 @@
 	}
 	
 	let chatClient = new ChatClient();
+	let chatWindowElement;
 
-	onMount(() => {});
+	onMount(() => {
+		chatWindowElement.focus();
+		chatWindowElement.scrollTop = chatWindowElement.scrollHeight;
+	});
+
+	/**
+	 * Send a message to the chat server and receive a response.
+	 * @param {KeyboardEvent} event
+	 */
+	async function handleKeyDown(event) {
+		// keyCode 13 is the Enter key
+		const key = event.key || String.fromCharCode(event.keyCode);
+		if ((key === 'Enter' || key === '\n') && !event.shiftKey) {
+			await sendChatMessageAsync(event);
+		}
+	}
+
+	/**
+	 * Send a message to the chat server and receive a response.
+	 * @param {MouseEvent} event
+	 */
+	 async function handleClick(event) {
+		if (event.shiftKey) {
+			chatClient.newMessage += "\n";
+		} else {
+			await sendChatMessageAsync(event);
+		}
+	}
 
 </script>
 
@@ -81,12 +115,11 @@
 	{/each}
 </div>
 
-<div id="message-input">
-	<textarea bind:value={chatClient.newMessage} />
-	<button on:click={async () => {
-		await sendChatMessageAsync();
-	}}>Send</button>
-</div>
+<!-- <form id="mbot-form" on:submit={sendChatMessageAsync}> -->
+<form id="mbot-form" on:keydown={handleKeyDown}>
+	<textarea bind:this={chatWindowElement} bind:value={chatClient.newMessage} />
+	<button type="submit" on:click={handleClick}>Send</button>
+</form>
 
 <style>
 	:root {
@@ -113,7 +146,7 @@
 		overflow: auto;
 	}
 
-	#message-input {
+	#mbot-form {
 		display: flex;
 		flex-direction: row;
 	}
