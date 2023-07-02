@@ -158,6 +158,7 @@
 		margin-bottom: var(--spacing-small);
 		border-radius: var(--radius-small);
 		color: var(--color-dark);
+		text-align: left;
 	}
 
 	.bot {
