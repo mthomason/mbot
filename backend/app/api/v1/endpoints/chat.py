@@ -30,25 +30,8 @@ def validate_message(chat_message: ChatMessage):
 	if len(chat_message.message) > 256:
 		raise HTTPException(status_code=400, detail="Message too long")
 
-#@router.post("/chat")
-async def chat_endpoint(chat_message: ChatMessage):
-	validate_message(chat_message)
-
-	response = openai.ChatCompletion.create(
-		model="gpt-3.5-turbo",
-		messages=[
-			{"role": "system", "content": "You are a helpful assistant."},
-			{"role": "user", "content": chat_message.message},
-		]
-	)
-
-	if response is None:
-		raise HTTPException(status_code=400, detail="Unable to process the message")
-
-	return {"response": response.choices[0].message['content']}
-
 @router.post("/chat")
-async def achat_endpoint(chat_message: ChatMessage):
+async def chat_endpoint_async(chat_message: ChatMessage):
 	validate_message(chat_message)
 
 	try:
@@ -71,37 +54,6 @@ async def achat_endpoint(chat_message: ChatMessage):
 				i += 1
 
 		return StreamingResponse(event_stream())
-
-	except Exception as e:
-		raise HTTPException(status_code=400, detail=str(e))
-
-async def chat_endpoint_async(chat_message: ChatMessage):
-	validate_message(chat_message)
-
-	try:
-		response = openai.ChatCompletion.create(
-			model="gpt-3.5-turbo",
-			messages=[
-				{"role": "system", "content": "You are a helpful assistant."},
-				{"role": "user", "content": chat_message.message},
-				],
-			stream=True
-		)
-
-		async def extract_response():
-			for chunk in response:
-				first_choice = chunk['choices'][0]
-				#print(chunk)
-				yield {
-					'created': chunk['created'],
-					'index': first_choice['index'],
-					'role': first_choice['delta']['role'],
-					'message': first_choice['delta']['content'],  # Assume the message is in this location
-					'finish_reason' : first_choice['finish_reason'],
-				}
-
-		return StreamingResponse(extract_response(), media_type="application/json")
-		#return await extract_response()
 
 	except Exception as e:
 		raise HTTPException(status_code=400, detail=str(e))
