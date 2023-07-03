@@ -1,6 +1,7 @@
 {
-  "dependencies": {
-    "firebase": "^9.23.0",
-    "firebaseui": "^6.0.2"
-  }
+	"dependencies": {
+		"firebase": "^9.23.0",
+		"firebaseui": "^6.0.2",
+		"markdown-it": "^13.0.1"
+	}
 }
