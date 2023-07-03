@@ -30,24 +30,14 @@
 			"cwd": "${workspaceFolder}/vite-app",
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen"
-		},{
+		},
+		{
 			"name": "mbotclient-chrome",
 			"type": "chrome",
 			"request": "launch",
 			"url": "http://localhost:5173",
 			"webRoot": "${workspaceFolder}/vite-app/src"
 		}
-		/*{
-			"name": "mbotclient-edge",
-			"type": "vscode-edge-devtools.debug",
-			"request": "launch",
-			"url": "http://localhost:4000",
-			"webRoot": "${workspaceFolder}/vite-app/src",
-			"sourceMaps": true,
-			"sourceMapPathOverrides": {
-				"webpack:///src/*": "${webRoot}/src/*"
-			}
-		},*/
 	],
 	"compounds": [
 		{
@@ -55,4 +45,5 @@
 			"configurations": ["mbotserv", "mbotclient-vite", "mbotclient-chrome"]
 		}
 	]
+
 }
