@@ -29,9 +29,11 @@ class SQLServerConnectionInfo(ConnectionInfo):
 	def __init__(self, host: str, port: int, username: str, password: str, database: str):
 		super().__init__(DatabaseType.MSSQL, host, port, username, password, database)
 
-connectionInfo = SQLiteConnectionInfo("database.db")
 from .database_factory import DatabaseFactory
+
+connectionInfo = SQLiteConnectionInfo("/User/michael/Projects/tmp/test_db.db")
 sqlite_database = DatabaseFactory.get_database_from_connection_info(connectionInfo)
 sqlite_database.connect()
 sqlite_database.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL)")
+sqlite_database.execute("INSERT INTO users (name, email, password) VALUES ('John Doe', 'johnd@example.com', 'password123')")
 sqlite_database.disconnect()
