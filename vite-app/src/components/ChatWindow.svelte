@@ -1,49 +1,22 @@
 <!-- /frontend/src/components/ChatWindow.svelte -->
 
-<script>
+<script lang="ts">
 	import { onMount, afterUpdate } from "svelte";
 	import ChatClient from "./ChatClient";
 	import MarkdownIt from "markdown-it";
 
-	let chatClient = new ChatClient();
-	let chatWindowElement;
-	const markdownDecoder = new MarkdownIt();
-
-	function scrollToBottom() {
-		const chatWindow = document.getElementById('chat-window');
-		chatWindow.scrollTop = chatWindow.scrollHeight;
-	}
+	let chatClient: ChatClient = new ChatClient();
+	let chatWindowElement: HTMLTextAreaElement;
+	const markdownDecoder: MarkdownIt = new MarkdownIt();
 
 	/**
-	 * Run after the component mounts.
-	 * @param void
-	 */
-	onMount(() => {
-		try {
-			chatWindowElement.focus();
-			chatWindowElement.scrollTop = chatWindowElement.scrollHeight;
-		} catch (error) {
-			console.error(error);
-		}
-	});
-
-	/**
-	 * Run after the component updates.
-	 * @param void
-	 */
-	 afterUpdate(() => {
-		try {
-			scrollToBottom();
-		} catch (error) {
-			console.error(error);
-		}
-	});
-
-	/**
+	 * @function sendChatMessageAsync
+	 * @description
 	 * Send a message to the chat server and receive a response.
 	 * @param {Event} event
+	 * @returns void
 	 */
-	async function sendChatMessageAsync(event) {
+	async function sendChatMessageAsync(event: Event) {
 		try {
 			if (!chatClient.userChatPrompt) return;
 
@@ -53,20 +26,20 @@
 			chatClient.messages = [...chatClient.messages, { role: "user", content: chatClient.userChatPrompt }];
 			chatClient.userChatPrompt = "";
 			const reader = response.body.getReader();
-			let chunks = "";
+			let chunks: string = "";
 			const decoder = new TextDecoder("utf-8");
 			let messageInMarkdown = "";
 			while (true) {
 				const { done, value } = await reader.read();
 
 				chunks += decoder.decode(value);
-				const endOfMessageIndex = chunks.indexOf("\n\n");
+				const endOfMessageIndex: number = chunks.indexOf("\n\n");
 
 				if (endOfMessageIndex !== -1) {
-					const messageString = chunks.slice(0, endOfMessageIndex);
+					const messageString: string = chunks.slice(0, endOfMessageIndex);
 					chunks = chunks.slice(endOfMessageIndex + 2);
-					const data = JSON.parse(messageString);
-					const botMessage = data.choices[0].delta.content;
+					const data: any = JSON.parse(messageString);
+					const botMessage: string = data.choices[0].delta.content;
 
 					if (botMessage) {
 						if (chatClient.messages[chatClient.messages.length - 1].role === "user") {
@@ -76,7 +49,6 @@
 							];
 							messageInMarkdown = botMessage;
 						} else {
-							//chatClient.messages[chatClient.messages.length - 1].content += botMessage;
 							messageInMarkdown = messageInMarkdown += botMessage;
 							chatClient.messages[chatClient.messages.length - 1].content = markdownDecoder.render(messageInMarkdown);
 						}
@@ -97,10 +69,13 @@
 	}
 
 	/**
+	 * @function handleKeyDown
+	 * @description
 	 * Send a message to the chat server and receive a response.
 	 * @param {KeyboardEvent} event
+	 * @returns void
 	 */
-	async function handleKeyDown(event) {
+	async function handleKeyDown(event: KeyboardEvent) {
 		// keyCode 13 is the Enter key
 		const key = event.key || String.fromCharCode(event.keyCode);
 		if ((key === 'Enter' || key === '\n') && !event.shiftKey) {
@@ -109,16 +84,62 @@
 	}
 
 	/**
+	 * @function handleClick
+	 * @description
 	 * Send a message to the chat server and receive a response.
 	 * @param {MouseEvent} event
+	 * @returns void
 	 */
-	 async function handleClick(event) {
+	 async function handleClick(event: MouseEvent) {
 		if (event.shiftKey) {
 			chatClient.userChatPrompt += "\n";
 		} else {
 			await sendChatMessageAsync(event);
 		}
 	}
+
+	/**
+	 * @function scrollToBottom
+	 * @description
+	 * Scroll to the bottom of the chat window.
+	 * @param void
+	 * @returns void
+	 */
+	function scrollToBottom() {
+		const chatWindow = document.getElementById('chat-window');
+		chatWindow.scrollTop = chatWindow.scrollHeight;
+	}
+
+	/**
+	 * @function onMount
+	 * @description
+	 * Run after the component mounts.
+	 * @param void
+	 * @returns void
+	 */
+	 onMount(() => {
+		try {
+			chatWindowElement.focus();
+			chatWindowElement.scrollTop = chatWindowElement.scrollHeight;
+		} catch (error) {
+			console.error(error);
+		}
+	});
+
+	/**
+	 * @function afterUpdate
+	 * @description
+	 * Run after the component updates.
+	 * @param void
+	 * @returns void
+	 */
+	 afterUpdate(() => {
+		try {
+			scrollToBottom();
+		} catch (error) {
+			console.error(error);
+		}
+	});
 
 </script>
 
