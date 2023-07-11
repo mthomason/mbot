@@ -1,11 +1,10 @@
 
-
-
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-
 import "./app.css";
 import App from "./App.svelte";
+
+/*
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyABNk9oM5G2gZZy0_XrKAT-eAPI7q6feLs",
@@ -26,6 +25,7 @@ auth.onAuthStateChanged(user => {
 		console.log("User is logged out.")
 	}
 });
+*/
 
 const app = new App({
 	target: document.getElementById('app'),
