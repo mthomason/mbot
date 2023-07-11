@@ -152,7 +152,6 @@
 	{/each}
 </div>
 
-<!-- <form id="mbot-form" on:submit={sendChatMessageAsync}> -->
 <form id="mbot-form" on:keydown={handleKeyDown}>
 	<textarea bind:this={chatWindowElement}
 			  bind:value={chatClient.userChatPrompt} />

@@ -1,11 +1,11 @@
 
-//import firebase from 'firebase/compat/app';
 
-import './app.css'
-import App from './App.svelte'
 
-import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+
+import "./app.css";
+import App from "./App.svelte";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyABNk9oM5G2gZZy0_XrKAT-eAPI7q6feLs",
@@ -16,9 +16,7 @@ const firebaseConfig = {
 	appId: "1:311121570177:web:e6472526cb1d1eedaba080",
 	measurementId: "G-5GXRMHKLR5"
 };
-
-// Initialize Firebase 
-const firebaseApp = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig)
 const auth = getAuth(firebaseApp);
 
 auth.onAuthStateChanged(user => {
@@ -29,11 +27,8 @@ auth.onAuthStateChanged(user => {
 	}
 });
 
-//const analytics = getAnalytics(app);
-
-
 const app = new App({
-  target: document.getElementById('app'),
-})
+	target: document.getElementById('app'),
+});
 
 export default app
