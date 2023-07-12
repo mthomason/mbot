@@ -5,5 +5,7 @@
 		"GXRMHKLR",
 		"mbot",
 		"mbotfbase"
-	]
+	],
+	"python.pythonPath": "./mbot-env/bin/python",
+	"python.defaultInterpreterPath": "./mbot-env/bin/python"
 }

@@ -1,5 +1,5 @@
+<!-- /frontend/src/App.svelte -->
 <script>
-
 	import { onDestroy } from 'svelte';
 	import { authentication } from './stores/auth.store'
 	import ChatWindow from './components/ChatWindow.svelte';

@@ -1,10 +1,9 @@
 <!-- /frontend/src/components/NavBar.svelte -->
-
 <script lang="ts">
 	/*
 	import type { SvelteComponentTyped } from "svelte";
 	class ComponentName extends SvelteComponentTyped<{propertyName: string;}> {}
-*/
+	*/
 </script>
 
 <!-- o -->

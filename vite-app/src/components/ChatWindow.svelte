@@ -25,7 +25,10 @@
 			const response = await chatClient.postChatMessage();
 			chatClient.messages = [...chatClient.messages, { role: "user", content: chatClient.userChatPrompt }];
 			chatClient.userChatPrompt = "";
-			const reader = response.body.getReader();
+			const reader = response.body?.getReader();
+			if (reader === null || reader === undefined) {
+				throw new Error("Reader is null or undefined.");
+			}
 			let chunks: string = "";
 			const decoder = new TextDecoder("utf-8");
 			let messageInMarkdown = "";
@@ -107,6 +110,7 @@
 	 */
 	function scrollToBottom() {
 		const chatWindow = document.getElementById('chat-window');
+		if (chatWindow === null || chatWindow === undefined) return;
 		chatWindow.scrollTop = chatWindow.scrollHeight;
 	}
 
@@ -152,9 +156,10 @@
 	{/each}
 </div>
 
-<form id="mbot-form" on:keydown={handleKeyDown}>
+<form id="mbot-form">
 	<textarea bind:this={chatWindowElement}
-			  bind:value={chatClient.userChatPrompt} />
+			  bind:value={chatClient.userChatPrompt}
+			  on:keydown={handleKeyDown} />
 	<button type="submit" on:click={handleClick}>Send</button>
 </form>
 
