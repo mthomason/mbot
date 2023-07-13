@@ -1,8 +1,7 @@
 <!-- /frontend/src/components/ToolBar.svelte -->
 <script>
 	import { onMount, onDestroy } from 'svelte';
-	import { login, logout } from '../stores/auth.store'
-	import { authentication } from '../stores/auth.store'
+	import { login, logout, authentication } from '../stores/auth.store'
 
 	let user = null;
 
@@ -17,8 +16,23 @@
 
 <nav class="toolbar">
 {#if user}
-	<button on:click={logout}>Logout</button>
-	<div>Welcome, {user.displayName}</div>
+	<div class="items-center space-x-2 hidden xl:inline-flex">
+		<img
+			src={user?.photoURL}
+			alt={user?.displayName}
+			class="h-12 w-12 rounded-full" />
+		<div class="flex flex-col">
+			<p>
+				Logged in as <span class="text-purple-500 italic font-bold">
+					{user?.displayName}
+				</span>
+			</p>
+			<p>{user?.email}</p>
+		</div>
+		<button on:click={logout} class="bg-white p-2 rounded-full text-black">Logout</button>
+	</div>
+	<!--button on:click={logout}>Logout</button-->
+	<!--div>Welcome, {user.displayName}</div-->
 {:else}
 	<button on:click={login}>Login with Google</button>
 {/if}

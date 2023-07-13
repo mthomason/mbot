@@ -5,7 +5,6 @@ import {
 	type Auth, type User, type UserCredential
 } from "firebase/auth";
 
-
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
@@ -45,7 +44,7 @@ export async function login() {
 		const result: UserCredential = await signInWithPopup(auth, provider);
 		authentication.set(result.user);
 	} catch (error) {
-		console.error("Error logging in", error);
+		console.error("Error logging in.", error);
 	}
 }
 
@@ -54,6 +53,6 @@ export async function logout() {
 		await signOut(auth);
 		authentication.set(null);
 	} catch (error) {
-		console.error("Error logging out", error);
+		console.error("Error logging out.", error);
 	}
 }

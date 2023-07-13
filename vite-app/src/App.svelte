@@ -1,7 +1,7 @@
 <!-- /frontend/src/App.svelte -->
 <script>
-	import { onDestroy } from 'svelte';
-	import { authentication } from './stores/auth.store'
+	//import { onDestroy } from 'svelte';
+	//import { authentication } from './stores/auth.store'
 	import ChatWindow from './components/ChatWindow.svelte';
 	import NavBar from './components/NavBar.svelte';
 	import ToolBar from './components/ToolBar.svelte';
