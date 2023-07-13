@@ -26,7 +26,7 @@
 .navbar {
 	/* background-color: #f8f9fa; */
 	padding: 15px 0;
-	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+	/* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1); */
 }
 
 .navbar-list {
