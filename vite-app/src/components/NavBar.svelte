@@ -22,8 +22,6 @@
 	<a href="/about">About</a>
 </div-->
 
-<!-- User/Logout -->
-
 <style>
 .navbar {
 	/* background-color: #f8f9fa; */
