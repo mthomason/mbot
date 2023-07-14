@@ -33,12 +33,9 @@
 			"type": "chrome",
 			"request": "launch",
 			"url": "http://localhost:5173",
-			"webRoot": "${workspaceFolder}/vite-app/src"
+			"webRoot": "${workspaceFolder}/frontend/src"
 		}],
 	"compounds": [{
-			"name": "Launch FastAPI and Vite",
-			"configurations": ["mbotserv", "mbotclient-vite", "mbotclient-chrome"]
-		}, {
 			"name": "Launch FastAPI and SvelteKit",
 			"configurations": ["mbotserv", "mbotclient", "mbotclient-chrome"]
 		}
