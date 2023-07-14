@@ -17,6 +17,18 @@
 			"cwd": "${workspaceFolder}/backend",
 			"envFile": "${workspaceFolder}/.env"
 		}, {
+			"name": "mbotclient",
+			"type": "node",
+			"request": "launch",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": [
+				"run",
+				"dev"
+			],
+			"cwd": "${workspaceFolder}/frontend",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
+		}, {
 			"name": "mbotclient-vite",
 			"type": "node",
 			"request": "launch",

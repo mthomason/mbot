@@ -4,7 +4,8 @@
 		"firebaseapp",
 		"GXRMHKLR",
 		"mbot",
-		"mbotfbase"
+		"mbotfbase",
+		"preprocess"
 	],
 	"python.pythonPath": "./mbot-env/bin/python",
 	"python.defaultInterpreterPath": "./mbot-env/bin/python"
