@@ -2,8 +2,8 @@
 
 <script lang="ts">
 	import { onMount, afterUpdate } from "svelte";
-	import ChatClient from "./ChatClient";
 	import MarkdownIt from "markdown-it";
+	import ChatClient from "../lib/ChatClient";
 
 	let chatClient: ChatClient = new ChatClient();
 	let chatWindowElement: HTMLTextAreaElement;

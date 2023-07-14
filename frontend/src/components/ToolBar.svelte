@@ -1,9 +1,10 @@
 <!-- /frontend/src/components/ToolBar.svelte -->
-<script>
+<script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { login, logout, authentication } from '../stores/auth.store'
+	import type { User} from 'firebase/auth';
 
-	let user = null;
+	let user: User | null = null;
 
 	const unsubscribe = authentication.subscribe((value) => {
 		user = value;

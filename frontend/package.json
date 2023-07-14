@@ -2,6 +2,7 @@
 	"name": "frontend",
 	"version": "0.0.1",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -27,5 +28,8 @@
 		"vite": "^4.0.0",
 		"vitest": "^0.25.3"
 	},
-	"type": "module"
+	"dependencies": {
+		"firebase": "^10.0.0",
+		"markdown-it": "^13.0.1"
+	}
 }

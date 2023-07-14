@@ -29,18 +29,6 @@
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen"
 		}, {
-			"name": "mbotclient-vite",
-			"type": "node",
-			"request": "launch",
-			"runtimeExecutable": "npm",
-			"runtimeArgs": [
-				"run",
-				"dev"
-			],
-			"cwd": "${workspaceFolder}/vite-app",
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		}, {
 			"name": "mbotclient-chrome",
 			"type": "chrome",
 			"request": "launch",
@@ -50,5 +38,9 @@
 	"compounds": [{
 			"name": "Launch FastAPI and Vite",
 			"configurations": ["mbotserv", "mbotclient-vite", "mbotclient-chrome"]
-		}]
+		}, {
+			"name": "Launch FastAPI and SvelteKit",
+			"configurations": ["mbotserv", "mbotclient", "mbotclient-chrome"]
+		}
+	]
 }
