@@ -5,6 +5,7 @@
 	import type { User} from 'firebase/auth';
 
 	let user: User | null = null;
+	let showTooltip: boolean = false;
 
 	const unsubscribe = authentication.subscribe((value) => {
 		user = value;
@@ -13,22 +14,50 @@
 	onDestroy(() => {
 		unsubscribe();
 	});
+
+	function openTooltip() {
+		showTooltip = true;
+	}
+
+	function closeTooltip() {
+		showTooltip = false;
+	}
+
+	function onClickInside(e: MouseEvent & { currentTarget: EventTarget & HTMLDivElement; }) {
+		showTooltip = !showTooltip;
+		//e.stopPropagation();
+	}
+
+	function onKeydown(e: KeyboardEvent & { currentTarget: EventTarget & HTMLDivElement; }) {
+		if (e.key === 'Enter' || e.key === 'Space') {
+			openTooltip();
+			e.preventDefault();
+		}
+		console.log(e);
+	}
+
 </script>
 
 <nav class="toolbar">
 	<div class="placeholder"></div>
 {#if user}
 	<div class="items-center space-x-2 hidden xl:inline-flex">
-		<div class="avatar-container">
+		<div class="avatar-container"
+			 on:click={onClickInside}
+			 on:blur={closeTooltip}
+			 on:keydown={onKeydown}
+			 role="button" tabindex="0">
 			<img src={user?.photoURL}
 				 alt={user?.displayName}
 				 class="h-12 w-12 avatar circle" />
-			<div class="avatar-tooltip">
+	{#if showTooltip} 
+			<div class="avatar-tooltip" style="display: block;">
 				<p>{user?.displayName}</p>
 				<p>{user?.email}</p>
 				<p>Logged in with Google</p>
-				<button on:click={logout} class="logout-button">Logout</button>
+				<button on:click|stopPropagation={logout} class="logout-button">Logout</button>
 			</div>
+	{/if}
 		</div>
 	</div>
 {:else}
@@ -39,10 +68,10 @@
 <style>
 /*General Styles*/
 .toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
 }
 
 .placeholder {
@@ -92,10 +121,12 @@
 	border-color: #333 transparent transparent transparent;
 }
 
+/*
 .avatar-container:hover .avatar-tooltip, 
 .avatar-container:active .avatar-tooltip {
 	display: block;
 }
+*/
 
 /*Button Styles*/
 .logout-button, .login-button {
