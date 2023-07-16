@@ -2,10 +2,12 @@
 	"cSpell.words": [
 		"appspot",
 		"firebaseapp",
+		"flexbox",
 		"GXRMHKLR",
 		"mbot",
 		"mbotfbase",
-		"preprocess"
+		"preprocess",
+		"scrollbars"
 	],
 	"python.pythonPath": "./mbot-env/bin/python",
 	"python.defaultInterpreterPath": "./mbot-env/bin/python"

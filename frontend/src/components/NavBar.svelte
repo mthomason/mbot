@@ -24,11 +24,11 @@
 	display: flex;
 	justify-content: space-around;
 }
-/*
+
 .navbar-item {
 	  padding: 0 10px;
 }
-*/
+
 .navbar-link {
 	text-decoration: none;
 	color: #f8f9fa;

@@ -1,5 +1,13 @@
 Hi Top-Level-Lead-Architect-and-WebDev-GPT,
 
+Give me modern but stripped down html and css for a basic but modern application skeleton layout with the following requirements:
+1. I want it to have a LeftNavBar which fills up the vertical height.  When the content of that bar is filled, it will add scrollbars to the left nav bar.  You can add example content to the LeftNavBar.
+2. I want it to have a bottom bar which fills up the horizontal width, until it bumps into the left nav bar.  When the content of that bar is filled, it will add scrollbars to the bottom bar.  In VS Code, this section has a terminal.
+3. The main body content will have a chat window.
+4. I don't want this done using a grid, because that is hackish, but it could be done using flexbox or flex columns or whatever.
+
+I basically want the outline for a VS Code style user interface, using modern HTML 5 and CSS.
+
 We are building a chatbot application.  It is a client-server application.  The frontend client is built in Svelte.  The backend is currently a restful API using Python3/FastAPI.
 
 Everything is in a folder called `mbot`.  The frontend is in `mbot/vite-app` and the backend is in `mbot/backend`.

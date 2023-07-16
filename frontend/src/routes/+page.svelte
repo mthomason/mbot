@@ -1,26 +1,10 @@
-<!--h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p-->
-
-<!-- /frontend/src/App.svelte -->
+<!-- /frontend/src/routes/+page.svelte -->
 <script>
-	//import { onDestroy } from 'svelte';
-	//import { authentication } from './stores/auth.store'
 	import ChatWindow from '../components/ChatWindow.svelte';
 	import NavBar from '../components/NavBar.svelte';
 	import ToolBar from '../components/ToolBar.svelte';
-/*
-	const unsubscribe_auth = authentication.subscribe((user) => {
-		if (user) {
-			console.log(user)
-		} else {
-			console.log('no user')
-		}
-	});
-
-	onDestroy(() => {
-		unsubscribe_auth();
-	});
-*/
+	//import LeftNavBar from '../components/LeftNavBar.svelte';
+	//import BottomNavBar from '../components/BottomNavBar.svelte';
 </script>
 
 <ToolBar />
@@ -28,11 +12,15 @@
 	<h1 class="font-bold text-sm md:text-2xl tracking-widest">mbot</h1>
 </header>
 <NavBar />
+<!--LeftNavBar /-->
 <main>
 	<div class="app-chat-block">
 		<ChatWindow />
 	</div>
 </main>
+<!--BottomNavBar /-->
+
+	<!-- @import '../styles/app.css'; -->
 
 <style>
 	@import '../styles/app.css';
