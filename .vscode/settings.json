@@ -7,8 +7,9 @@
 		"mbot",
 		"mbotfbase",
 		"preprocess",
-		"scrollbars"
+		"scrollbars",
+		"skeletonlabs",
+		"tailwindcss"
 	],
-	"python.pythonPath": "./mbot-env/bin/python",
 	"python.defaultInterpreterPath": "./mbot-env/bin/python"
 }
