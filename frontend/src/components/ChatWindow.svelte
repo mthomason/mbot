@@ -158,10 +158,11 @@
 </div>
 
 <div id="mbot-prompt" class="mt-4 flex items-center">
-	<button class="input-group-shim bg-blue-500 text-white p-2 rounded-lg">
+	<!--button class="input-group-shim bg-blue-500 text-white p-2 rounded-lg">
 		+
-	</button>
+	</button-->
 	<textarea bind:value={chatClient.userChatPrompt}
+			  on:keydown={handleKeyDown}
 			  class="bg-transparent border-0 ring-0 flex-grow mx-2 p-2
 						rounded-lg border-2 border-gray-200"
 			  name="prompt"

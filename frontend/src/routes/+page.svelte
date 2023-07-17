@@ -1,6 +1,7 @@
 <!-- /frontend/src/routes/+page.svelte -->
 <script>
 	import ChatWindow from '../components/ChatWindow.svelte';
+    import Test from '../components/Test.svelte';
 </script>
 
 <header class="bg-secondary p-4 flex justify-between items-center text-white">
@@ -13,5 +14,5 @@
 </main>
 
 <style>
-	/* @import '../styles/app.css'; */
+
 </style>
