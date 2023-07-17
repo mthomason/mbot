@@ -20,10 +20,11 @@
 		try {
 			if (!chatClient.userChatPrompt) return;
 
-			event.preventDefault(); // prevent form from refreshing the page
+			event.preventDefault();
 
 			const response = await chatClient.postChatMessage();
-			chatClient.messages = [...chatClient.messages, { role: "user", content: chatClient.userChatPrompt }];
+			chatClient.messages = [...chatClient.messages,
+					{ role: "user", content: chatClient.userChatPrompt }];
 			chatClient.userChatPrompt = "";
 			const reader = response.body?.getReader();
 			if (reader === null || reader === undefined) {
@@ -31,7 +32,7 @@
 			}
 			let chunks: string = "";
 			const decoder = new TextDecoder("utf-8");
-			let messageInMarkdown = "";
+			let messageInMarkdownArray: string[] = [];
 			while (true) {
 				const { done, value } = await reader.read();
 
@@ -42,32 +43,29 @@
 					const messageString: string = chunks.slice(0, endOfMessageIndex);
 					chunks = chunks.slice(endOfMessageIndex + 2);
 					const data: any = JSON.parse(messageString);
-					const botMessage: string = data.choices[0].delta.content;
-
-					if (botMessage) {
-						if (chatClient.messages[chatClient.messages.length - 1].role === "user") {
-							chatClient.messages = [
-								...chatClient.messages,
-								{ role: "bot", content: botMessage },
-							];
-							messageInMarkdown = botMessage;
-						} else {
-							messageInMarkdown = messageInMarkdown += botMessage;
-							chatClient.messages[chatClient.messages.length - 1].content = markdownDecoder.render(messageInMarkdown);
-						}
-						console.log(botMessage);
-					}
-
+					displayBotMessageAsync(messageInMarkdownArray, data.choices[0].delta.content);
 					if (data.choices[0].finish_reason === "stop") {
 						console.log("Conversation ended");
 						break;
 					}
 				}
 				if (done) break;
-			
 			}
+			messageInMarkdownArray.length = 0;
 		} catch (error) {
 			console.error(error);
+		}
+	}
+
+	function displayBotMessageAsync(chunks: string[], chunk: string) {
+		if (chunk) {
+			if (chatClient.messages[chatClient.messages.length - 1].role === "user") {
+				chunks.push(chunk);
+				chatClient.messages = [...chatClient.messages, { role: "bot", content: chunk },];
+			} else {
+				chunks.push(chunk);
+				chatClient.messages[chatClient.messages.length - 1].content = markdownDecoder.render(chunks.join(""));
+			}
 		}
 	}
 
@@ -147,104 +145,38 @@
 
 </script>
 
-<div id="chat-window">
-	<!-- Display message stream. -->
+<div id="chat-window"
+	 class="w-full h-96 overflow-auto p-4 bg-gray-200 rounded-lg">
 	{#each chatClient.messages as message, index (index)}
-		<div class={message.role}>
-			<p>{@html message.content}</p>
+		<div class="{message.role}
+					{`message p-2 mb-2 rounded-lg ${message.role === 'user' ?
+						'bg-blue-400 text-white ml-auto' :
+						'bg-gray-400 text-black mr-auto'}`}">
+			<p class="prose">{@html message.content}</p>
 		</div>
 	{/each}
 </div>
 
-<form id="mbot-form">
-	<textarea bind:this={chatWindowElement}
-			  bind:value={chatClient.userChatPrompt}
-			  on:keydown={handleKeyDown} />
-	<button type="submit" on:click={handleClick}>Send</button>
-</form>
+<div id="mbot-prompt" class="mt-4 flex items-center">
+	<button class="input-group-shim bg-blue-500 text-white p-2 rounded-lg">
+		+
+	</button>
+	<textarea bind:value={chatClient.userChatPrompt}
+			  class="bg-transparent border-0 ring-0 flex-grow mx-2 p-2
+						rounded-lg border-2 border-gray-200"
+			  name="prompt"
+			  id="prompt"
+			  placeholder="Write a message..."
+			  rows="1"
+	/>
+	<button class="variant-filled-primary bg-blue-500 text-white p-2
+						rounded-lg"
+			on:click={handleClick}>Send</button>
+</div>
 
 <style>
-	/* @import './ChatWindow.css'; */
-:root {
-	--color-primary: #4caf50;
-	--color-secondary: #ffc107;
-	--color-dark: #333;
-	--color-light: #fff;
-	--spacing-small: 10px;
-	--spacing-medium: 20px;
-	--spacing-large: 30px;
-	--radius-small: 5px;
-}
-
-#chat-window {
-	display: flex;
-	flex-direction: column;
-	max-width: 800px;
-	height: 50vh; /*was 70vh; */
-	margin: 0 auto var(--spacing-small) auto;
-	padding: var(--spacing-medium);
-	border-radius: var(--radius-small);
-	background-color: var(--color-dark);
-	color: var(--color-light);
-	overflow: auto;
-}
-
-#mbot-form {
-	display: flex;
-	flex-direction: row;
-	max-width: 800px;
-	margin: 0 auto var(--spacing-small) auto;
-	padding: var(--spacing-medium);
-	border-radius: var(--radius-small);
-	/*background-color: var(--color-dark);*/
-	color: var(--color-dark);
-}
-
-.bot,
-.user {
-	max-width: 70%;
-	padding: var(--spacing-small);
-	margin-bottom: var(--spacing-small);
-	border-radius: var(--radius-small);
-	color: var(--color-dark);
-	text-align: left;
-}
-
-.bot {
-	align-self: flex-start;
-	background-color: var(--color-light);
-}
-
-.user {
-	align-self: flex-end;
-	background-color: var(--color-secondary);
-	color: var(--color-dark);
-}
-
-textarea {
-	padding: var(--spacing-small);
-	border: none;
-	border-radius: var(--radius-small);
-	resize: none;
-	overflow: auto;
-	min-height: 5vh;
-	max-height: 20vh;
-	flex: auto;
-}
-
-button {
-	padding: var(--spacing-small);
-	border: none;
-	border-radius: var(--radius-small);
-	background-color: var(--color-primary);
-	color: var(--color-light);
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-	margin: 0 var(--spacing-small) 0 var(--spacing-small);
-}
-
-button:hover {
-	background-color: darken(var(--color-primary), 10%);
-}
-
+	.message {
+		max-width: 80%;
+		word-wrap: break-word;
+	}
 </style>
