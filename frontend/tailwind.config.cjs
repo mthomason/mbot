@@ -13,7 +13,8 @@ const config = {
 		extend: {},
 	},
 	plugins: [
-		...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')()
+		...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')(),
+		require('@tailwindcss/typography')  // Add this line
 	],
 };
 
