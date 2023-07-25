@@ -2,7 +2,6 @@
 import { writable, type Writable } from "svelte/store";
 import {
 	getAuth,
-	onAuthStateChanged,
 	GoogleAuthProvider,
 	signInWithPopup,
 	signOut,
@@ -33,33 +32,46 @@ const firebaseApp: FirebaseApp = (getApps().length === 0) ?
 
 const auth: Auth = getAuth(firebaseApp);
 
-export const authentication: Writable<User | null> = writable(null);
+//export const authentication: Writable<User | null> = writable(null);
+export const authentication: Writable<{
+	isLoggedIn: boolean,
+	firebaseControlled: boolean,
+	user: User | null}> = writable(
+		{
+			isLoggedIn: false, firebaseControlled: false, user: null
+		}
+	);
 
 //onMount(() => {
 	auth.onAuthStateChanged((user: User | null) => {
 		if (user) {
-			authentication.set(user);
+			authentication.set({
+				isLoggedIn: true,
+				firebaseControlled: true,
+				user: user
+			});
 			console.log("User is logged in.");
 			console.log(user);
 		} else {
-			authentication.set(null);
+			authentication.set({
+				isLoggedIn: false,
+				firebaseControlled: true,
+				user: null
+			});
 			console.log("User is not logged in.");
 		}
 	});
 //});
-/*
-export const authentication = writable({
-	isLoggedIn: false,
-	firebaseControlled: false,
-	user: null,
-});
-*/
 
 export async function login() {
 	try {
 		const provider: GoogleAuthProvider = new GoogleAuthProvider();
 		const result: UserCredential = await signInWithPopup(auth, provider);
-		authentication.set(result.user);
+		authentication.set({
+			isLoggedIn: true,
+			firebaseControlled: true,
+			user: result.user
+		});
 	} catch (error) {
 		console.error("Error logging in.", error);
 	}
@@ -68,7 +80,11 @@ export async function login() {
 export async function logout() {
 	try {
 		await signOut(auth);
-		authentication.set(null);
+		authentication.set({
+			isLoggedIn: false,
+			firebaseControlled: true,
+			user: null
+		});
 	} catch (error) {
 		console.error("Error logging out.", error);
 	}

@@ -1,4 +1,5 @@
 # /backend/app/api/v1/endpoints/chat.py
+# -*- coding: utf-8 -*-
 
 from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException
@@ -8,9 +9,7 @@ from typing import Any, Optional, Tuple, Callable, TypeVar, Union
 from uuid import UUID
 
 import os
-
 import openai
-import uuid
 
 openai.api_key = os.getenv("OPENAI_API_KEY_MBOT")
 
@@ -21,18 +20,17 @@ chats: dict[UUID, list[dict[str, str]]] = {}
 class ChatMessage(BaseModel):
 	message: str
 
-# Define a helper function for validation
-def validate_message(chat_message: ChatMessage):
+@router.post("/chat")
+async def chat_endpoint_async(chat_message: ChatMessage):
 	if chat_message.message is None:
 		raise HTTPException(status_code=400, detail="No message provided")
 	if len(chat_message.message) == 0:
 		raise HTTPException(status_code=400, detail="Empty message provided")
-	if len(chat_message.message) > 256:
+	if len(chat_message.message) > 1024:
 		raise HTTPException(status_code=400, detail="Message too long")
 
-@router.post("/chat")
-async def chat_endpoint_async(chat_message: ChatMessage):
-	validate_message(chat_message)
+	print("Value:", chat_message)
+	print("Type:", type(chat_message))
 
 	try:
 		response = openai.ChatCompletion.create(
@@ -47,11 +45,14 @@ async def chat_endpoint_async(chat_message: ChatMessage):
 		# Since FastAPI doesn't support Server-Sent Events (SSE) natively,
 		# we'll convert the response to a string and yield each chunk as it arrives.
 		async def event_stream():
-			#i: int = 0
+			#yield "["
 			for chunk in response:
-				#print(f"Chunk {i}: `{chunk}`")
+				#print("Value: ", chunk)
+				#print("Type: ", type(chunk))
+				#yield str(chunk).join(("", ","))
 				yield str(chunk).join(("\n", "\n"))
-				#i += 1
+
+			#yield "]"
 
 		return StreamingResponse(event_stream())
 
