@@ -2,7 +2,7 @@
 
 from .database import Database
 
-# MS SQL Server database
+# ODBC database
 class OdbcDatabase(Database):
 	def connect(self):
 		import pyodbc

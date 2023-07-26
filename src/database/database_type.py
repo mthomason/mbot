@@ -3,8 +3,7 @@
 from enum import Enum
 
 class DatabaseType(Enum):
-	SQLITE = "sqlite"
-	MYSQL = "mysql"
-	MSSQL = "mssql"
-	ODBC = "odbc"
-	
+	SQLITE = 1
+	MYSQL = 2
+	ODBC = 3
+

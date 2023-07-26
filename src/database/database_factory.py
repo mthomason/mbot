@@ -3,7 +3,7 @@
 from .database import Database
 from .database_sqlite3 import Sqlite3Database
 from .database_mysql import MySqlDatabase
-from .database_sqlserver import SqlServerDatabase
+from .database_odbc import OdbcDatabase
 
 from .database_type import DatabaseType
 from .connection_information import ConnectionInfo
@@ -17,8 +17,8 @@ class DatabaseFactory:
 		match connection_info.db_type:
 			case DatabaseType.MYSQL:
 				return MySqlDatabase(connection_info)
-			case DatabaseType.MSSQL:
-				return SqlServerDatabase(connection_info)
+			case DatabaseType.ODBC:
+				return OdbcDatabase(connection_info)
 			case DatabaseType.SQLITE:
 				return Sqlite3Database(connection_info)
 			case _:
