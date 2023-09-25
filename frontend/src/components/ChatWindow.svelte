@@ -33,23 +33,46 @@
 			let chunks: string = "";
 			const decoder = new TextDecoder("utf-8");
 			let messageInMarkdownArray: string[] = [];
+
 			while (true) {
 				const { done, value } = await reader.read();
-
+	
 				chunks += decoder.decode(value);
-				const endOfMessageIndex: number = chunks.indexOf("\n\n");
+				const endOfMessageIndex = chunks.indexOf("\n\n");
 
 				if (endOfMessageIndex !== -1) {
-					const messageString: string = chunks.slice(0, endOfMessageIndex);
+					const messageString = chunks.slice(0, endOfMessageIndex);
 					chunks = chunks.slice(endOfMessageIndex + 2);
-					const data: any = JSON.parse(messageString);
-					displayBotMessageAsync(messageInMarkdownArray, data.choices[0].delta.content);
-					if (data.choices[0].finish_reason === "stop") {
-						console.log("Conversation ended");
-						break;
+					try {
+						const data = JSON.parse(messageString);
+						await displayBotMessageAsync(messageInMarkdownArray, data.choices[0].delta.content);
+						if (data.choices[0].finish_reason === "stop") {
+							console.log("Conversation ended");
+							break;
+						}
+					} catch (e) {
+						console.error('Error processing message chunk:', e);
 					}
 				}
-				if (done) break;
+				
+				if (done) {
+					if (chunks.length > 0) {
+						const chunkArray = chunks.split("\n\n");
+						for (const chunk of chunkArray) {
+							if (chunk.trim() === '') continue;
+							try {
+								const data = JSON.parse(chunk);
+								await displayBotMessageAsync(messageInMarkdownArray, data.choices[0].delta.content);
+								if (data.choices[0].finish_reason === "stop") {
+									console.log("Conversation ended");
+								}
+							} catch (e) {
+								console.error('Error processing the final chunk:', e, 'Chunk:', chunk);
+							}
+						}
+					}
+					break;
+				}
 			}
 			messageInMarkdownArray.length = 0;
 		} catch (error) {

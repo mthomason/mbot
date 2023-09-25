@@ -4,8 +4,8 @@
 from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
-
-from typing import Any, Optional, Tuple, Callable, TypeVar, Union
+import time
+from typing import Any, Optional, Tuple, Callable, TypeVar, Union, Generator
 from uuid import UUID
 
 import os
@@ -42,19 +42,11 @@ async def chat_endpoint_async(chat_message: ChatMessage):
 			stream=True
 		)
 
-		# Since FastAPI doesn't support Server-Sent Events (SSE) natively,
-		# we'll convert the response to a string and yield each chunk as it arrives.
 		async def event_stream():
-			#yield "["
 			for chunk in response:
-				#print("Value: ", chunk)
-				#print("Type: ", type(chunk))
-				#yield str(chunk).join(("", ","))
-				yield str(chunk).join(("\n", "\n"))
+				yield f"{str(chunk)}\n\n"
 
-			#yield "]"
-
-		return StreamingResponse(event_stream())
+		return StreamingResponse(event_stream(), media_type="text/plain")
 
 	except Exception as e:
 		raise HTTPException(status_code=400, detail=str(e))
