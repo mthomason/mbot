@@ -7,7 +7,7 @@
     import { authentication } from "../stores/auth.store";
 
 	let chatClient: ChatClient = new ChatClient();
-	let chatWindowElement: HTMLTextAreaElement;
+	let chatWindowElement: HTMLDivElement;
 	const markdownDecoder: MarkdownIt = new MarkdownIt();
 
 	/**
@@ -148,9 +148,6 @@
 	 */
 	 onMount(() => {
 		try {
-			if (chatWindowElement === null || chatWindowElement === undefined) {
-				return;
-			}
 			chatWindowElement.focus();
 			chatWindowElement.scrollTop = chatWindowElement.scrollHeight;
 		} catch (error) {
@@ -176,7 +173,7 @@
 
 </script>
 
-<div id="chat-window"
+<div id="chat-window" bind:this={chatWindowElement}
 	 class="w-full h-96 overflow-auto p-4 bg-gray-200 rounded-lg">
 	{#each chatClient.messages as message, index (index)}
 		<div class="{message.role}
@@ -189,9 +186,6 @@
 </div>
 
 <div id="mbot-prompt" class="mt-4 flex items-center">
-	<!--button class="input-group-shim bg-blue-500 text-white p-2 rounded-lg">
-		+
-	</button-->
 	<textarea bind:value={chatClient.userChatPrompt}
 			  on:keydown={handleKeyDown}
 			  class="bg-transparent border-0 ring-0 flex-grow mx-2 p-2
