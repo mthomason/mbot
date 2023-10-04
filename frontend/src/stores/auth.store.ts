@@ -2,12 +2,13 @@
 import { writable, type Writable } from "svelte/store";
 import {
 	getAuth,
+	getIdToken,
 	GoogleAuthProvider,
 	signInWithPopup,
 	signOut,
 	type Auth,
 	type User,
-	type UserCredential
+	type UserCredential,
 } from "firebase/auth";
 import {
 	initializeApp,
@@ -32,44 +33,70 @@ const firebaseApp: FirebaseApp = (getApps().length === 0) ?
 
 const auth: Auth = getAuth(firebaseApp);
 
-//export const authentication: Writable<User | null> = writable(null);
 export const authentication: Writable<{
 	isLoggedIn: boolean,
 	firebaseControlled: boolean,
+	idToken: string | null,
+	uniqueUserID: string | null,
 	user: User | null}> = writable(
 		{
-			isLoggedIn: false, firebaseControlled: false, user: null
+			isLoggedIn: false,
+			firebaseControlled: false,
+			idToken: null,
+			uniqueUserID: null,
+			user: null
 		}
 	);
 
-//onMount(() => {
-	auth.onAuthStateChanged((user: User | null) => {
-		if (user) {
-			authentication.set({
-				isLoggedIn: true,
-				firebaseControlled: true,
-				user: user
-			});
-			console.log("User is logged in.");
-			console.log(user);
-		} else {
-			authentication.set({
-				isLoggedIn: false,
-				firebaseControlled: true,
-				user: null
-			});
-			console.log("User is not logged in.");
-		}
-	});
-//});
+auth.onAuthStateChanged(async (user: User | null) => {
+	console.log("Auth state changed.");
+	if (user) {
+		console.log(user.displayName);
+		console.log(user.email);
+		console.log(user.photoURL);
+		console.log(user.uid);
+		console.log(user.providerId);
+		console.log(user.emailVerified);
+		console.log(user.isAnonymous);
+		console.log(user.metadata);
+		console.log(user.phoneNumber);
+		console.log(user.providerData);
+		console.log(user.refreshToken);
+		console.log(user.tenantId);
+		let idToken: string = await user.getIdToken();
+		console.log(user.toJSON());
+		console.log(idToken);
+		authentication.set({
+			isLoggedIn: true,
+			firebaseControlled: true,
+			idToken: idToken,
+			uniqueUserID: user.uid,
+			user: user
+		});
+		console.log("User is logged in.");
+		console.log(user);
+	} else {
+		authentication.set({
+			isLoggedIn: false,
+			firebaseControlled: true,
+			idToken: null,
+			uniqueUserID: null,
+			user: null
+		});
+		console.log("User is not logged in.");
+	}
+});
 
 export async function login() {
 	try {
 		const provider: GoogleAuthProvider = new GoogleAuthProvider();
 		const result: UserCredential = await signInWithPopup(auth, provider);
+		let webAuthToken: string = await result.user.getIdToken();
 		authentication.set({
 			isLoggedIn: true,
 			firebaseControlled: true,
+			idToken: webAuthToken,
+			uniqueUserID: result.user.uid,
 			user: result.user
 		});
 	} catch (error) {
@@ -83,6 +110,8 @@ export async function logout() {
 		authentication.set({
 			isLoggedIn: false,
 			firebaseControlled: true,
+			idToken: null,
+			uniqueUserID: null,
 			user: null
 		});
 	} catch (error) {

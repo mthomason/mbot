@@ -10,11 +10,13 @@
  * @property {string} userChatPrompt
  * */
 export default class ChatClient {
-	messages: any[];
 	userChatPrompt: string;
+	authIdToken: string;
+	messages: any[];
 	constructor() {
-		this.messages = [];
 		this.userChatPrompt = "";
+		this.authIdToken = "";
+		this.messages = [];
 	}
 
 	/**
@@ -37,10 +39,14 @@ export default class ChatClient {
 		if (this.userChatPrompt.length === 0) throw new Error("Message is empty");
 
 		try {
+			let body: string = JSON.stringify({ message: this.userChatPrompt });
 			const response = await fetch("http://localhost:8000/chat", {
 				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ message: this.userChatPrompt }),
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${this.authIdToken}`
+				},
+				body: body,
 			});
 			return response;
 		} catch (error) {

@@ -4,6 +4,7 @@
 	import { onMount, afterUpdate } from "svelte";
 	import MarkdownIt from "markdown-it";
 	import ChatClient from "../lib/ChatClient";
+    import { authentication } from "../stores/auth.store";
 
 	let chatClient: ChatClient = new ChatClient();
 	let chatWindowElement: HTMLTextAreaElement;
@@ -20,16 +21,28 @@
 		try {
 			if (!chatClient.userChatPrompt) return;
 
+			chatClient.authIdToken = $authentication?.idToken ?? "";
+
 			event.preventDefault();
 
 			const response = await chatClient.postChatMessage();
+
 			chatClient.messages = [...chatClient.messages,
 					{ role: "user", content: chatClient.userChatPrompt }];
 			chatClient.userChatPrompt = "";
+
+			if (!ReadableStreamDefaultReader.prototype.hasOwnProperty(Symbol.asyncIterator)) {
+				Object.defineProperty(ReadableStreamDefaultReader.prototype, Symbol.asyncIterator, {
+					get() {
+						return this;
+					},
+				});
+			}
 			const reader = response.body?.getReader();
 			if (reader === null || reader === undefined) {
 				throw new Error("Reader is null or undefined.");
 			}
+
 			let chunks: string = "";
 			const decoder = new TextDecoder("utf-8");
 			let messageInMarkdownArray: string[] = [];
@@ -115,24 +128,15 @@
 	 * @returns void
 	 */
 	 async function handleClick(event: MouseEvent) {
-		if (event.shiftKey) {
-			chatClient.userChatPrompt += "\n";
-		} else {
-			await sendChatMessageAsync(event);
+		try {
+			if (event.shiftKey) {
+				chatClient.userChatPrompt += "\n";
+			} else {
+				await sendChatMessageAsync(event);
+			}
+		} catch (error) {
+			console.error(error);
 		}
-	}
-
-	/**
-	 * @function scrollToBottom
-	 * @description
-	 * Scroll to the bottom of the chat window.
-	 * @param void
-	 * @returns void
-	 */
-	function scrollToBottom() {
-		const chatWindow = document.getElementById('chat-window');
-		if (chatWindow === null || chatWindow === undefined) return;
-		chatWindow.scrollTop = chatWindow.scrollHeight;
 	}
 
 	/**
@@ -144,12 +148,16 @@
 	 */
 	 onMount(() => {
 		try {
+			if (chatWindowElement === null || chatWindowElement === undefined) {
+				return;
+			}
 			chatWindowElement.focus();
 			chatWindowElement.scrollTop = chatWindowElement.scrollHeight;
 		} catch (error) {
 			console.error(error);
 		}
 	});
+
 
 	/**
 	 * @function afterUpdate
@@ -160,7 +168,7 @@
 	 */
 	 afterUpdate(() => {
 		try {
-			scrollToBottom();
+			chatWindowElement.scrollTop = chatWindowElement.scrollHeight;
 		} catch (error) {
 			console.error(error);
 		}

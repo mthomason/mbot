@@ -51,7 +51,8 @@
 			"type": "chrome",
 			"request": "launch",
 			"url": "http://localhost:5173",
-			"webRoot": "${workspaceFolder}/frontend/src"
+			"webRoot": "${workspaceFolder}/frontend/src",
+			"port": 9222
 		}],
 	"compounds": [{
 			"name": "Launch FastAPI and SvelteKit",
