@@ -1,6 +1,8 @@
 # /backend/app/api/v1/endpoints/chat.py
 # -*- coding: utf-8 -*-
 
+from mserv.utilities.firebase_token_verifier import FirebaseTokenVerifier
+
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.params import Depends
 from fastapi.responses import StreamingResponse
@@ -8,16 +10,16 @@ from pydantic import BaseModel
 from typing import Any, Optional, Tuple, Callable, TypeVar, Union, Generator
 from uuid import UUID
 
-from mserv.utilities.firebase_token_verifier import FirebaseTokenVerifier
-
 import time
 import os
 import openai
 
+# Load the OpenAI API key from the environment variables
 OPENAI_API_KEY: str | None = os.getenv("OPENAI_API_KEY_MBOT")
 if OPENAI_API_KEY is None:
 	raise Exception("OpenAI API key not found in environment variables")
 
+# Load the Google Project ID from the environment variables
 GOOGLE_PROJECT_ID: str | None = os.getenv("GOOGLE_PROJECT_ID_MBOT")
 if GOOGLE_PROJECT_ID is None:
 	raise Exception("Google Project ID not found in environment variables")
@@ -68,21 +70,21 @@ async def chat_endpoint_async(chat_message: ChatMessage,
 	print("Type:", type(chat_message))
 	print("User ID:", user_id)
 
-	try:
-		response = openai.ChatCompletion.create(
-			model="gpt-3.5-turbo",
-			messages=[
-				{"role": "system", "content": "You are a helpful assistant."},
-				{"role": "user", "content": chat_message.message},
-				],
-			stream=True
-		)
-
-		async def event_stream():
-			for chunk in response:
+	async def event_stream():
+		try:
+			response = await openai.ChatCompletion.acreate(
+				model = "gpt-3.5-turbo",
+				messages = [
+					{"role": "system", "content": "You are a helpful assistant."},
+					{"role": "user", "content": chat_message.message},
+					],
+				stream = True
+			)
+			print("Type response:", type(response))
+			async for chunk in response:
 				yield f"{str(chunk)}\n\n"
 
-		return StreamingResponse(event_stream(), media_type="text/plain")
+		except Exception as e:
+			raise HTTPException(status_code=400, detail=str(e))
 
-	except Exception as e:
-		raise HTTPException(status_code=400, detail=str(e))
+	return StreamingResponse(event_stream(), media_type="text/plain")
