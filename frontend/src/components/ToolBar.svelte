@@ -8,7 +8,7 @@
 	let showTooltip: boolean = false;
 
 	const unsubscribe = authentication.subscribe((value) => {
-		user = value;
+		user = value.user;
 	});
 
 	onDestroy(() => {
