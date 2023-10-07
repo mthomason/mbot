@@ -1,21 +1,9 @@
 
 import { writable, type Writable } from "svelte/store";
-import {
-	getAuth,
-	getIdToken,
-	GoogleAuthProvider,
-	signInWithPopup,
-	signOut,
-	type Auth,
-	type User,
-	type UserCredential,
-} from "firebase/auth";
-import {
-	initializeApp,
-	getApp,
-	getApps,
-	type FirebaseOptions,
-	type FirebaseApp
+import { getAuth, getIdToken, GoogleAuthProvider, signInWithPopup, signOut,
+	type Auth, type User, type UserCredential, } from "firebase/auth";
+import { initializeApp, getApp, getApps,
+	type FirebaseOptions, type FirebaseApp
 } from "firebase/app";
 
 const firebaseConfig: FirebaseOptions = {
@@ -51,21 +39,7 @@ export const authentication: Writable<{
 auth.onAuthStateChanged(async (user: User | null) => {
 	console.log("Auth state changed.");
 	if (user) {
-		console.log(user.displayName);
-		console.log(user.email);
-		console.log(user.photoURL);
-		console.log(user.uid);
-		console.log(user.providerId);
-		console.log(user.emailVerified);
-		console.log(user.isAnonymous);
-		console.log(user.metadata);
-		console.log(user.phoneNumber);
-		console.log(user.providerData);
-		console.log(user.refreshToken);
-		console.log(user.tenantId);
 		let idToken: string = await user.getIdToken();
-		console.log(user.toJSON());
-		console.log(idToken);
 		authentication.set({
 			isLoggedIn: true,
 			firebaseControlled: true,

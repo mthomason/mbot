@@ -2,15 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from mserv.utilities.firebase_token_verifier import FirebaseTokenVerifier
-
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.params import Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Any, Optional, Tuple, Callable, TypeVar, Union, Generator
 from uuid import UUID
-
-import time
 import os
 import openai
 
@@ -24,11 +21,9 @@ GOOGLE_PROJECT_ID: str | None = os.getenv("GOOGLE_PROJECT_ID_MBOT")
 if GOOGLE_PROJECT_ID is None:
 	raise Exception("Google Project ID not found in environment variables")
 
-# Initalize the FastAPI router
-router = APIRouter()
+router = APIRouter()				# Initalize the FastAPI router
 
-# Initialize the OpenAI API
-openai.api_key = OPENAI_API_KEY
+openai.api_key = OPENAI_API_KEY		# Set the OpenAI API key
 
 chats: dict[UUID, list[dict[str, str]]] = {}
 
@@ -80,7 +75,6 @@ async def chat_endpoint_async(chat_message: ChatMessage,
 					],
 				stream = True
 			)
-			print("Type response:", type(response))
 			async for chunk in response:
 				yield f"{str(chunk)}\n\n"
 
