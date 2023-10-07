@@ -55,7 +55,7 @@
 			"port": 9222
 		}],
 	"compounds": [{
-			"name": "Launch FastAPI and SvelteKit",
+			"name": "Launch mbot (client and server)",
 			"configurations": ["mbotserv", "mbotclient", "mbotclient-chrome"]
 		}, {
 			"name": "Launch mbotapp (main and renderer)",
