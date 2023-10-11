@@ -3,8 +3,8 @@
 	import { drawerStore } from '@skeletonlabs/skeleton';
 
 	let items: {title: string; content: string; anchor: string; }[] = [
-		{ title: 'Chat', content: 'Chatbot', anchor: '/' },
 		{ title: 'Home', content: 'Home', anchor: '/' },
+		{ title: 'Chat', content: 'Chat', anchor: '/chat' },
 		{ title: 'About', content: 'About', anchor: '/about' },
 	];
 
