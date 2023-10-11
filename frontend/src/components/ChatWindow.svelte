@@ -174,7 +174,7 @@
 </script>
 
 <div id="chat-window" bind:this={chatWindowElement}
-	 class="w-full h-96 overflow-auto p-4 bg-gray-200 rounded-lg">
+	 class="w-full h-96 overflow-auto p-4 bg-surface-200 rounded-lg variant-filled-surface">
 	{#each chatClient.messages as message, index (index)}
 		<div class="{message.role}
 					{`message p-2 mb-2 rounded-lg ${message.role === 'user' ?
@@ -188,8 +188,8 @@
 <div id="mbot-prompt" class="mt-4 flex items-center">
 	<textarea bind:value={chatClient.userChatPrompt}
 			  on:keydown={handleKeyDown}
-			  class="bg-transparent border-0 ring-0 flex-grow mx-2 p-2
-						rounded-lg border-2 border-gray-200"
+			  class="bg-surface-200 ring-0 flex-grow mx-2 p-2
+						rounded-lg border-2 border-gray-200 text-black"
 			  name="prompt"
 			  id="prompt"
 			  placeholder="Write a message..."
