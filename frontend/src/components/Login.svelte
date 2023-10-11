@@ -41,7 +41,7 @@
 <div class="login-block">
 	<div class="placeholder"></div>
 {#if user}
-	<div class="items-center space-x-2 hidden xl:inline-flex">
+	<div class="items-center space-x-2 xl:inline-flex">
 		<div class="avatar-container"
 			 on:click={onClickInside}
 			 on:blur={closeTooltip}
