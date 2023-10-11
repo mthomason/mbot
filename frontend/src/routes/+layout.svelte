@@ -45,7 +45,7 @@
 				💬🤖
 			</svelte:fragment-->
 			<svelte:fragment slot="trail">
-				<LightSwitch /><Login />
+				<LightSwitch /><div class="login-block"><Login /></div>
 			</svelte:fragment>
 			<!--svelte:fragment slot="headline">
 				mbot
@@ -63,3 +63,12 @@
 	<!-- Page Footer Slot -->
 	<!-- App Footer Slot -->
 </AppShell>
+
+<style>
+		.login-block {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 15px;
+	}
+</style>

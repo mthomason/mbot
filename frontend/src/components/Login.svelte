@@ -12,6 +12,7 @@
 	});
 
 	onDestroy(() => {
+		user = null;
 		unsubscribe();
 	});
 
@@ -38,8 +39,6 @@
 
 </script>
 
-<div class="login-block">
-	<div class="placeholder"></div>
 {#if user}
 	<div class="items-center space-x-2 xl:inline-flex">
 		<div class="avatar-container"
@@ -63,21 +62,22 @@
 {:else}
 	<button on:click={login} class="login-button">Login</button>
 {/if}
-</div>
 
 <style>
 	/*General Styles*/
+	/*
 	.login-block {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		padding: 15px;
 	}
-	
+	*/
+	/*
 	.placeholder {
 		flex-grow: 1;
 	}
-	
+	*/
 	.avatar-container {
 		position: relative;
 		cursor: pointer;
@@ -139,7 +139,7 @@
 	}
 	
 	.logout-button {
-		background-color: #f44336; /* Red */
+		background-color: #f44336; 
 	}
 	
 	.logout-button:hover {
@@ -147,7 +147,7 @@
 	}
 	
 	.login-button {
-		background-color: #4285F4; /* Google Blue */
+		background-color: #4285F4; 
 	}
 	
 	.login-button:hover {

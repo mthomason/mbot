@@ -39,7 +39,7 @@ export const authentication: Writable<{
 auth.onAuthStateChanged(async (user: User | null) => {
 	console.log("Auth state changed.");
 	if (user) {
-		let idToken: string = await user.getIdToken();
+		const idToken: string = await user.getIdToken();
 		authentication.set({
 			isLoggedIn: true,
 			firebaseControlled: true,

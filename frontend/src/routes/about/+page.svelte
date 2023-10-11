@@ -2,11 +2,11 @@
 
 <div class="container p-10 space-y-4">
 	<header class="bg-secondary p-4 flex justify-between items-center">
-		<h1 class="font-bold text-sm md:text-2xl tracking-widest">mbot</h1>
+		<h2 class="h2 font-sans font-bold text-sm md:text-2xl tracking-widest">About</h2>
 	</header>
 	<main>
 		<div>
-			About
+			This is a most amazing and very great and such awesome application.
 		</div>
 	</main>
 </div>
