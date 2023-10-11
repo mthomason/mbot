@@ -1,6 +1,6 @@
 
 import { writable, type Writable } from "svelte/store";
-import { getAuth, getIdToken, GoogleAuthProvider, signInWithPopup, signOut,
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut,
 	type Auth, type User, type UserCredential, } from "firebase/auth";
 import { initializeApp, getApp, getApps,
 	type FirebaseOptions, type FirebaseApp
@@ -65,7 +65,7 @@ export async function login() {
 	try {
 		const provider: GoogleAuthProvider = new GoogleAuthProvider();
 		const result: UserCredential = await signInWithPopup(auth, provider);
-		let webAuthToken: string = await result.user.getIdToken();
+		const webAuthToken: string = await result.user.getIdToken();
 		authentication.set({
 			isLoggedIn: true,
 			firebaseControlled: true,
