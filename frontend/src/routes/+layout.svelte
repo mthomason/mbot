@@ -65,7 +65,7 @@
 </AppShell>
 
 <style>
-		.login-block {
+	.login-block {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;

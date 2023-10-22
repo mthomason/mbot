@@ -18,6 +18,10 @@
 
 </script>
 
+<svelte:head>
+	<title>Account</title>
+</svelte:head>
+
 <div class="container p-10 space-y-4">
 	<header class="bg-secondary p-4 flex justify-between items-center">
 		<h2 class="h2 font-sans font-bold text-sm md:text-2xl tracking-widest">Account</h2>
@@ -31,12 +35,12 @@
 				<p>Logged in with Google</p>
 				<button on:click|stopPropagation={logout} class="logout-button">Logout</button>
 			{:else}
-			<div class="h-12">
-				<p>You are not logged into the application.  Please login to continue.</p>
-			</div>
-			<div>
-				<Login />
-			</div>
+				<div class="h-12">
+					<p>You are not logged into the application.  Please login to continue.</p>
+				</div>
+				<div>
+					<Login />
+				</div>
 			{/if}
 		</div>
 	</main>
