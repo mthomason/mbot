@@ -6,6 +6,7 @@
 		{ title: 'Home', content: 'Home', anchor: '/' },
 		{ title: 'Chat', content: 'Chat', anchor: '/chat' },
 		{ title: 'Account', content: 'Account', anchor: '/account' },
+		{ title: 'Browser', content: 'Browser', anchor: '/browser' },
 		{ title: 'About', content: 'About', anchor: '/about' },
 	];
 
