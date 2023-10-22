@@ -27,29 +27,24 @@ openai.api_key = OPENAI_API_KEY		# Set the OpenAI API key
 
 chats: dict[UUID, list[dict[str, str]]] = {}
 
-# Initialize the Firebase token verifier
-def get_verifier(project_id: str = GOOGLE_PROJECT_ID):
-	return FirebaseTokenVerifier(project_id)
-
-async def get_current_user_id(request: Request, verifier: FirebaseTokenVerifier = Depends(get_verifier)) -> str:
-	# Extract the token from the Authorization header
-	token = request.headers.get('Authorization')
-	if not token:
-		raise HTTPException(status_code=401, detail="Token is missing")
-	
-	# Remove the Bearer prefix if it exists
-	token = token.replace("Bearer ", "")
-	
-	# Use the verifier to extract the user ID from the token
-	user_id = verifier.get_user_id(token)
-	
-	if user_id is None:
-		raise HTTPException(status_code=401, detail="User not authenticated")
-	
-	return user_id
-
 class ChatMessage(BaseModel):
 	message: str
+
+# Get the current user ID from the request
+async def get_current_user_id(request: Request) -> str:
+	auth_token: str = request.headers.get('Authorization')
+	if not auth_token:
+		raise HTTPException(status_code=401, detail="Token is missing")
+
+	auth_token = auth_token.replace("Bearer ", "")
+
+	verifier: FirebaseTokenVerifier = FirebaseTokenVerifier(GOOGLE_PROJECT_ID)
+	user_id: str = verifier.get_user_id(auth_token)
+
+	if user_id is None:
+		raise HTTPException(status_code=401, detail="User not authenticated")
+
+	return user_id
 
 @router.post("/chat")
 async def chat_endpoint_async(chat_message: ChatMessage,
