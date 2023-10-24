@@ -1,4 +1,4 @@
-from jose import jwt, JWTError
+from jose import jwt, JWTError, JOSEError
 import requests
 from typing import Optional
 from fastapi import HTTPException
@@ -12,19 +12,41 @@ class FirebaseTokenVerifier:
 		self.GOOGLE_ISSUER = self.GOOGLE_ISSUER.replace("[YOUR_PROJECT_ID]", project_id)
 
 	def _fetch_google_certs(self) -> dict:
-		return requests.get(self.GOOGLE_CERTS_URL).json()
+		response = requests.get(self.GOOGLE_CERTS_URL)
+		if response.status_code == 200:
+			return response.json()
+		else:
+			response.raise_for_status()
+
+	#def _fetch_google_certs(self) -> dict:
+	#	return requests.get(self.GOOGLE_CERTS_URL).json()
 
 	def decode_token(self, token: str) -> dict:
-		certs = self._fetch_google_certs()
+		certs: dict = self._fetch_google_certs()
+		
+		# Extract the Key ID from the JWT header without verification
+		unverified_header = jwt.get_unverified_header(token)
+		kid: str = unverified_header['kid']
+		auth_algorithm: str = unverified_header['alg']
+		key: str | None = None
+
+		# Find the key we need based on the Key ID
+		if kid in certs:
+			key = certs[kid]
+		else:
+			raise ValueError('Key ID from token not found in Google certs.')
+
 		try:
 			return jwt.decode(
-				token,
-				certs,
-				algorithms=["RS256"],
+				token=token,
+				key=key,
+				algorithms=[auth_algorithm],
 				audience=self.project_id,
 				issuer=self.GOOGLE_ISSUER
 			)
 		except JWTError as e:
+			raise HTTPException(status_code=401, detail=str(e))
+		except JOSEError as e:
 			raise HTTPException(status_code=401, detail=str(e))
 		except Exception as e:
 			raise HTTPException(status_code=500, detail="Internal server error")

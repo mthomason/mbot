@@ -4,7 +4,7 @@
 	import { onMount, afterUpdate } from "svelte";
 	import MarkdownIt from "markdown-it";
 	import ChatClient from "../lib/ChatClient";
-    import { authentication } from "../stores/auth.store";
+	import { authentication } from "../stores/auth.store";
 
 	let chatClient: ChatClient = new ChatClient();
 	let chatWindowElement: HTMLDivElement;
@@ -43,48 +43,49 @@
 				throw new Error("Reader is null or undefined.");
 			}
 
-			let chunks: string = "";
 			const decoder = new TextDecoder("utf-8");
 			let messageInMarkdownArray: string[] = [];
 
-			while (true) {
-				const { done, value } = await reader.read();
-	
-				chunks += decoder.decode(value);
-				const endOfMessageIndex = chunks.indexOf("\n\n");
-
-				if (endOfMessageIndex !== -1) {
-					const messageString = chunks.slice(0, endOfMessageIndex);
-					chunks = chunks.slice(endOfMessageIndex + 2);
-					try {
-						const data = JSON.parse(messageString);
-						await displayBotMessageAsync(messageInMarkdownArray, data.choices[0].delta.content);
-						if (data.choices[0].finish_reason === "stop") {
-							console.log("Conversation ended");
-							break;
-						}
-					} catch (e) {
-						console.error('Error processing message chunk:', e);
-					}
-				}
+			let reading_data: boolean = true;
+			while (reading_data) {
 				
-				if (done) {
-					if (chunks.length > 0) {
-						const chunkArray = chunks.split("\n\n");
-						for (const chunk of chunkArray) {
-							if (chunk.trim() === '') continue;
+				const { done, value } = await reader.read();
+				if (!done) {
+					const chunk = decoder.decode(value, { stream: true });
+					const partialChunkArray = chunk.split("\n");
+
+					let partialChunk: string = "";
+					let its_the_end = false;
+					if (partialChunkArray.length >= 1) {
+						for (const pc of partialChunkArray) {
 							try {
-								const data = JSON.parse(chunk);
-								await displayBotMessageAsync(messageInMarkdownArray, data.choices[0].delta.content);
-								if (data.choices[0].finish_reason === "stop") {
-									console.log("Conversation ended");
+								let dataPart: string = pc.trim();
+								if (dataPart.length > 0) {
+									const chatChunk = JSON.parse(pc);
+									if (!chatChunk.is_end) {
+										await displayBotMessageAsync(messageInMarkdownArray, chatChunk.content);
+									} else {
+										its_the_end = true;
+									}
 								}
 							} catch (e) {
-								console.error('Error processing the final chunk:', e, 'Chunk:', chunk);
+								console.error('Error processing partial chunk:', e, 'Partial chunk:', partialChunk);
+							}
+						}
+					} else {
+						if (partialChunkArray.length === 1) {
+							partialChunk = partialChunkArray[0];
+							const chatChunk = JSON.parse(partialChunk);
+							if (!chatChunk.is_end) {
+								await displayBotMessageAsync(messageInMarkdownArray, chatChunk.content);
+							} else {
+								its_the_end = true;
 							}
 						}
 					}
-					break;
+					if (its_the_end) reading_data = false;
+				} else {
+					reading_data = false;
 				}
 			}
 			messageInMarkdownArray.length = 0;

@@ -22,6 +22,7 @@ app.add_middleware(
 app.include_router(chat.router)
 
 @app.get("/")
-def read_root():
-	return {"Hello": "World"}
-
+def read_root() -> dict[str, str]:
+	return {
+		"app": "💬🤖"
+		}

@@ -12,7 +12,7 @@
 export default class ChatClient {
 	userChatPrompt: string;
 	authIdToken: string;
-	messages: any[];
+	messages: {role: string, content: string}[];
 	constructor() {
 		this.userChatPrompt = "";
 		this.authIdToken = "";
@@ -39,7 +39,7 @@ export default class ChatClient {
 		if (this.userChatPrompt.length === 0) throw new Error("Message is empty");
 
 		try {
-			let body: string = JSON.stringify({ message: this.userChatPrompt });
+			const body: string = JSON.stringify({ message: this.userChatPrompt });
 			const response = await fetch("http://localhost:8000/chat", {
 				method: "POST",
 				headers: {
