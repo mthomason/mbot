@@ -4,8 +4,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Activate virtual environment if it exists
-if [ -f "$DIR/mbot-env/bin/activate" ]; then
-	source "$DIR/mbot-env/bin/activate"
+if [ -f "$DIR/mbot-env12/bin/activate" ]; then
+	source "$DIR/mbot-env12/bin/activate"
 else
 	echo "Could not find the virtual environment."
 	echo "Please run the setup script to create the virtual environment"

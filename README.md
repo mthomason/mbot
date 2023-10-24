@@ -1,7 +1,24 @@
+# README.md
+
+ `pip install fastapi boto3 aioboto3 uvicorn requests python-jose openai`
+
+The following command was used to create this project for Python 3.12, because
+ there is currently a bug in the latest version of the OpenAI Python package:
+ `pip install --upgrade pip`
+ `pip install --pre openai`
+ `pip install 'uvicorn[standard]'`
+ `pip install 'fastapi[all]'`
+ `pip install --upgrade 'python-jose[cryptography]'`
+
+ `pyjwt`
+
+ `pip install --upgrade pydantic_core`
+ `pip install --upgrade starlette`
 
 💡🚀🌟🌈✨🔥🛡️🦁💫📚🖥️💪🌱🎉
 
 Remember:
+
 - 💡: Keep generating new ideas and innovative thoughts.
 - 🚀: Always aim for the stars; strive for the unimaginable.
 - 🌟: Shine brightly in everything that you undertake.

@@ -1,5 +1,7 @@
 {
 	"cSpell.words": [
+		"aioboto",
+		"aiobotocore",
 		"aiohttp",
 		"aiosignal",
 		"anyio",
@@ -8,10 +10,14 @@
 		"asttokens",
 		"asyncio",
 		"backcall",
+		"boto",
+		"botocore",
 		"certifi",
 		"cffi",
+		"chardet",
 		"dateutil",
 		"debugpy",
+		"docutils",
 		"fastapi",
 		"firebaseapp",
 		"flexbox",
@@ -22,6 +28,7 @@
 		"iniconfig",
 		"ipykernel",
 		"ipython",
+		"jmespath",
 		"matplotlib",
 		"mbot",
 		"mbotfbase",
@@ -40,6 +47,7 @@
 		"pycparser",
 		"pydantic",
 		"Pygments",
+		"pyjwt",
 		"pyodbc",
 		"pytest",
 		"pyzmq",
@@ -55,5 +63,5 @@
 		"wcwidth",
 		"yarl"
 	],
-	"python.defaultInterpreterPath": "./mbot-env/bin/python"
+	"python.defaultInterpreterPath": "/Users/michael/Projects/mbot/mbot-env12/bin/python3"
 }
