@@ -1,5 +1,6 @@
 # .gitignore
 mbot-env/
+mbot-env12/
 *.pyc
 __pycache__/
 
