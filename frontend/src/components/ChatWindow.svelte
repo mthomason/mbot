@@ -75,11 +75,14 @@
 					} else {
 						if (partialChunkArray.length === 1) {
 							partialChunk = partialChunkArray[0];
-							const chatChunk = JSON.parse(partialChunk);
-							if (!chatChunk.is_end) {
-								await displayBotMessageAsync(messageInMarkdownArray, chatChunk.content);
-							} else {
-								its_the_end = true;
+							partialChunk = partialChunk.trim();
+							if (partialChunk.length > 0) {
+								const chatChunk = JSON.parse(partialChunk);
+								if (!chatChunk.is_end) {
+									await displayBotMessageAsync(messageInMarkdownArray, chatChunk.content);
+								} else {
+									its_the_end = true;
+								}
 							}
 						}
 					}

@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# File: mserv/utilities/mfirebase_token_verifier.py
+
 from jose import jwt, JWTError, JOSEError
 import requests
 from typing import Optional
