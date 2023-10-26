@@ -95,24 +95,10 @@ async def chat_endpoint_async(chat_message: ChatMessage,
 			is_end: bool = False
 			async for chunk in response:
 				is_end = chunk.choices[0].finish_reason == "stop"
-				if is_end:
-					break
 				content: str = chunk.choices[0].delta.content
-				yield ChatResponse(user_id=user_id, content=content, is_end=is_end).model_dump_json() + "\n"
-		except Exception as e:
-			raise HTTPException(status_code=400, detail=str(e))
-
-	async def event_stream_text_async():
-		try:
-			response: ChatCompletionChunk | None = await get_chat_response_async(chat_message.message)
-			the_end: bool = False
-			async for chunk in response:
-				content: str = chunk.choices[0].delta.content
-				if content is not None:
-					yield f"{str(content)}\n\n"
-				else:
-					yield f"{str()}\n\n"
-
+				yield ChatResponse(user_id=user_id,
+								   content=content,
+								   is_end=is_end).model_dump_json() + "\n"
 		except Exception as e:
 			raise HTTPException(status_code=400, detail=str(e))
 
