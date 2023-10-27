@@ -24,6 +24,15 @@ class MBotConfig(BaseModel):
 		log_level: str
 		connection_settings: ConnectionSettings
 
+		class DatabaseSettings(BaseModel):
+
+			class DynamoDBSettings(BaseModel):
+				region_name: str
+				endpoint_url: str
+
+			dynamodb: DynamoDBSettings
+		database_settings: DatabaseSettings
+
 	name: str
 	version: str
 	description: str
