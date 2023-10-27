@@ -14,6 +14,8 @@ from mserv.mbot_config import MBotConfig
 from mserv.mbot_delegate import MbotDelegate
 
 appdelegate: MbotDelegate = MbotDelegate()
+loaded: bool = appdelegate.load()
+
 mbotconfig: MBotConfig = appdelegate.mbotconfig
 fastapi_app: FastAPI = appdelegate.fastapi_app
 
