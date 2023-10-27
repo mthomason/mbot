@@ -7,13 +7,17 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, validator
 import json
+
 from app.api.v1.endpoints import chat
+from app.api.v1.endpoints import users
 from mserv.mbot_config import MBotConfig
+from mserv.mbot_delegate import MbotDelegate
 
-app: FastAPI = FastAPI()
-mbotconfig: MBotConfig = MBotConfig.load("config.json")
+appdelegate: MbotDelegate = MbotDelegate()
+mbotconfig: MBotConfig = appdelegate.mbotconfig
+fastapi_app: FastAPI = appdelegate.fastapi_app
 
-app.add_middleware(
+fastapi_app.add_middleware(
 	CORSMiddleware,
 	allow_origins=mbotconfig.appconfig.connection_settings.allow_origins,
 	allow_credentials=True,
@@ -21,26 +25,25 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 
-app.include_router(chat.router)
+fastapi_app.include_router(chat.router)
+fastapi_app.include_router(users.router)
 
-@app.get("/")
+@fastapi_app.get("/")
 def read_root() -> dict[str, str]:
-	return {
-		"app": mbotconfig.emojid,
-		}
+	return {"app": mbotconfig.emojid}
 
-@app.get("/name")
+@fastapi_app.get("/name")
 def name() -> dict[str, str]:
 	return {"name": mbotconfig.name}
 
-@app.get("/version")
+@fastapi_app.get("/version")
 def version() -> dict[str, str]:
 	return {"version": mbotconfig.version}
 
-@app.get("/health")
+@fastapi_app.get("/health")
 def health() -> dict[str, str]:
 	return {"status": "ok"}
 
-@app.get("/ping")
+@fastapi_app.get("/ping")
 def ping() -> dict[str, str]:
 	return {"ping": "pong"}

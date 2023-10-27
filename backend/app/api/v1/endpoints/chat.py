@@ -8,11 +8,10 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import AsyncGenerator, Any, Optional, Tuple, Callable, TypeVar, Union, Generator
 from uuid import UUID
+from openai.types.chat import ChatCompletionChunk
+from mserv.utilities.firebase_token_verifier import FirebaseTokenVerifier
 import os
 import openai
-from openai.types.chat import ChatCompletionChunk
-
-from mserv.utilities.firebase_token_verifier import FirebaseTokenVerifier
 
 OPENAI_PREVIEW: bool = True
 
@@ -96,6 +95,7 @@ async def chat_endpoint_async(chat_message: ChatMessage,
 			async for chunk in response:
 				is_end = chunk.choices[0].finish_reason == "stop"
 				content: str = chunk.choices[0].delta.content
+				if not content: content = ""
 				yield ChatResponse(user_id=user_id,
 								   content=content,
 								   is_end=is_end).model_dump_json() + "\n"
