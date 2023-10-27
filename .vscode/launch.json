@@ -27,7 +27,7 @@
 			"request": "launch",
 			"module": "uvicorn",
 			"args": [
-				"main:app",
+				"main:fastapi_app",
 				"--reload"
 			],
 			"jinja": true,
