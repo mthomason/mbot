@@ -25,8 +25,8 @@ GOOGLE_PROJECT_ID: str | None = os.getenv("GOOGLE_PROJECT_ID_MBOT")
 if GOOGLE_PROJECT_ID is None:
 	raise Exception("Google Project ID not found in environment variables")
 
-router: APIRouter = APIRouter()			# Initalize the FastAPI router
-async_openai_client: openai.AsyncOpenAI  = openai.AsyncClient(api_key=OPENAI_API_KEY)	# Initialize the OpenAI client
+router: APIRouter = APIRouter()
+async_openai_client: openai.AsyncOpenAI = openai.AsyncClient(api_key=OPENAI_API_KEY)
 
 chats: dict[UUID, list[dict[str, str]]] = {}
 

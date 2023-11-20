@@ -10,7 +10,7 @@ import json
 
 from app.api.v1.endpoints import chat
 from app.api.v1.endpoints import users
-from mserv.mbot_config import MBotConfig
+from mserv.mbot_config import MBotConfig, FastApiConnSettings
 from mserv.mbot_delegate import MbotDelegate
 
 appdelegate: MbotDelegate = MbotDelegate()
@@ -19,9 +19,11 @@ loaded: bool = appdelegate.load()
 mbotconfig: MBotConfig = appdelegate.mbotconfig
 fastapi_app: FastAPI = appdelegate.fastapi_app
 
+conn_settings: FastApiConnSettings = mbotconfig.appconfig.connection_settings
+
 fastapi_app.add_middleware(
 	CORSMiddleware,
-	allow_origins=mbotconfig.appconfig.connection_settings.allow_origins,
+	allow_origins=conn_settings.allow_origins,
 	allow_credentials=True,
 	allow_methods=["*"],
 	allow_headers=["*"],

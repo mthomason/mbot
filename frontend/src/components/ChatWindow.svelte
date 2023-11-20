@@ -21,7 +21,7 @@
 		try {
 			if (!chatClient.userChatPrompt) return;
 
-			chatClient.authIdToken = $authentication?.idToken ?? "";
+			chatClient.authIdToken = $authentication?.id_token ?? "";
 
 			event.preventDefault();
 
