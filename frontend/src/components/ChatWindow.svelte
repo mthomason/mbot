@@ -92,9 +92,23 @@
 				}
 			}
 			messageInMarkdownArray.length = 0;
-		} catch (error) {
+		} catch (error: unknown) {
+			displayBotErrorAsync(error);
 			console.error(error);
 		}
+	}
+
+	function displayBotErrorAsync(error: unknown | Error | string) {
+		let message: string = "Error: ";
+		if (error instanceof Error) {
+			message = message.concat(error.message);
+		} else if (typeof error === "string") {
+			message = message.concat(error);
+		} else {
+			message = "An error occurred.";
+		}
+
+		chatClient.messages = [...chatClient.messages, { role: "bot", content: message },];
 	}
 
 	function displayBotMessageAsync(chunks: string[], chunk: string) {

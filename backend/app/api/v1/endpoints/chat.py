@@ -26,7 +26,12 @@ if GOOGLE_PROJECT_ID is None:
 	raise Exception("Google Project ID not found in environment variables")
 
 router: APIRouter = APIRouter()
+if router is None:
+	raise Exception("Failed to initialize API router")
+
 async_openai_client: openai.AsyncOpenAI = openai.AsyncClient(api_key=OPENAI_API_KEY)
+if async_openai_client is None:
+	raise Exception("Failed to initialize OpenAI client")
 
 chats: dict[UUID, list[dict[str, str]]] = {}
 
@@ -57,6 +62,15 @@ async def get_chat_response_async_legacy(message: str) -> Any:
 						],
 					stream = True
 				)
+
+def handle_openai_status_error(e: openai.APIStatusError, user_id: str) -> Generator[str, None, None]:
+	error_array: list[str] = e.message.split(" ")
+	max_index: int = len(error_array) - 1
+
+	for i, chunk in enumerate(error_array):
+		is_end: bool = (i == max_index)
+		content: str = chunk + " " if chunk else ""
+		yield ChatResponse(user_id=user_id, content=content, is_end=is_end).model_dump_json() + "\n"
 
 # Get the current user ID from the request
 async def get_current_user_id(request: Request) -> str:
@@ -99,6 +113,22 @@ async def chat_endpoint_async(chat_message: ChatMessage,
 				yield ChatResponse(user_id=user_id,
 								   content=content,
 								   is_end=is_end).model_dump_json() + "\n"
+
+		except openai.RateLimitError as e:
+			for response in handle_openai_status_error(e, user_id):
+				yield response
+
+		except openai.AuthenticationError as e:
+			for response in handle_openai_status_error(e, user_id):
+				yield response
+
+		except openai.APIStatusError as e:
+			for response in handle_openai_status_error(e, user_id):
+				yield response
+
+		except openai.APIError as e:
+			raise HTTPException(status_code=500, detail=str(e.message))
+		
 		except Exception as e:
 			raise HTTPException(status_code=400, detail=str(e))
 
