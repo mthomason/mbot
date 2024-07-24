@@ -50,7 +50,7 @@
 			"name": "mbotclient-chrome",
 			"type": "chrome",
 			"request": "launch",
-			"url": "http://localhost:5173",
+			"url": "http://localhost:9222",
 			"webRoot": "${workspaceFolder}/frontend/src",
 			"port": 9222
 		}],
