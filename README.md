@@ -25,7 +25,7 @@ This project is designed for:
 
 ## Demo
 
-(Optional: Add a GIF or link to a hosted demo here if available.)  
+<img src="docs/mbot-demo.gif" alt="mbot Demo" width="220">
 
 ---
 
