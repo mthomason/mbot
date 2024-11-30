@@ -1,0 +1,43 @@
+# --- General Source Code ---
+*.py           text linguist-detectable # Python source
+*.js           text linguist-detectable # JavaScript source
+*.ts           text linguist-detectable # TypeScript source
+*.html         text linguist-detectable # HTML files
+*.svelte       text linguist-detectable # Svelte files
+*.css          text linguist-detectable # Stylesheets
+*.postcss      text linguist-detectable # PostCSS config
+
+# --- Documentation ---
+*.md           text linguist-documentation # Markdown docs
+*.txt          text linguist-documentation # Text files
+
+# --- Configuration Files ---
+*.json         text linguist-vendored  # JSON configs
+*.config       text linguist-vendored  # General configs
+*.cjs          text linguist-vendored  # CommonJS configs
+*.npmrc        text linguist-vendored  # npm config
+
+# --- Scripts ---
+*.sh           text eol=lf            # Shell scripts (Unix LF endings)
+*.bat          text eol=crlf          # Batch scripts (Windows CRLF endings)
+
+# --- Binary Files ---
+*.png          binary linguist-detectable  # Image files
+*.gif          binary linguist-detectable  # GIFs and animations
+
+# --- Build Artifacts & Generated Files ---
+dist/*         linguist-generated     # Build output
+*.lock         text linguist-vendored # Lock files for dependency managers
+
+# --- Editor & Tooling ---
+.vscode/*      linguist-vendored      # VSCode settings
+*.eslintrc.cjs text linguist-vendored # ESLint config
+
+# --- Dependencies (Vendored) ---
+node_modules/* linguist-vendored      # npm modules
+frontend/package-lock.json linguist-vendored # Frontend lock file
+electron/package-lock.json linguist-vendored # Electron lock file
+
+# --- Miscellaneous ---
+.gitignore     text linguist-vendored
+LICENSE        text linguist-documentation
