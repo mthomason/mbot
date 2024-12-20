@@ -45,7 +45,7 @@ class ChatResponse(BaseModel):
 
 async def get_chat_response_async(message: str) -> openai.AsyncStream[ChatCompletionChunk] | None:
 	return await async_openai_client.chat.completions.create(
-					model = "gpt-3.5-turbo",
+					model = "gpt-4o-mini",
 					messages = [
 						{"role": "system", "content": "You are a helpful assistant."},
 						{"role": "user", "content": message},
@@ -55,7 +55,7 @@ async def get_chat_response_async(message: str) -> openai.AsyncStream[ChatComple
 
 async def get_chat_response_async_legacy(message: str) -> Any:
 	return await openai.ChatCompletion.acreate(
-					model = "gpt-3.5-turbo",
+					model = "gpt-4o-mini",
 					messages = [
 						{"role": "system", "content": "You are a helpful assistant."},
 						{"role": "user", "content": message},
