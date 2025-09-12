@@ -5,8 +5,8 @@ REM Navigate to the directory containing the script
 cd /d %~dp0
 
 REM Activate virtual environment if it exists
-if exist "mbot\mbot-env12\Scripts\activate" (
-	call mbot\mbot-env12\Scripts\activate
+if exist "mbot\venv\Scripts\activate" (
+	call mbot\venv\Scripts\activate
 ) else (
 	echo Could not find the virtual environment.
 	echo Please run the setup script to create the virtual environment

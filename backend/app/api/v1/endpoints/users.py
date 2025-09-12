@@ -1,4 +1,4 @@
-# /backend/app/api/v1/endpoints/users.py
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from mserv.mbot_config import MBotConfig

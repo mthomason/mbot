@@ -3,10 +3,10 @@
 <script lang="ts">
 	import { onMount, afterUpdate } from "svelte";
 	import MarkdownIt from "markdown-it";
-	import ChatClient from "../lib/ChatClient";
+	import AuctionAgent from "../lib/AuctionAgent"
 	import { authentication } from "../stores/auth.store";
 
-	let chatClient: ChatClient = new ChatClient();
+	let auctionAgent: AuctionAgent = new AuctionAgent();
 	let chatWindowElement: HTMLDivElement;
 	const markdownDecoder: MarkdownIt = new MarkdownIt();
 
@@ -19,17 +19,18 @@
 	 */
 	async function sendChatMessageAsync(event: Event) {
 		try {
-			if (!chatClient.userChatPrompt) return;
+			if (!auctionAgent.auctionTitle) return;
+			if (!auctionAgent.auctionDescription) return;
 
-			chatClient.authIdToken = $authentication?.id_token ?? "";
+			auctionAgent.authIdToken = $authentication?.id_token ?? "";
 
 			event.preventDefault();
 
-			const response = await chatClient.postChatMessage();
+			const response = await auctionAgent.postAuctionRequest();
 
-			chatClient.messages = [...chatClient.messages,
-					{ role: "user", content: chatClient.userChatPrompt }];
-			chatClient.userChatPrompt = "";
+			auctionAgent.messages = [...auctionAgent.messages,
+					{ role: "user", content: auctionAgent.userChatPrompt }];
+			auctionAgent.userChatPrompt = "";
 
 			if (!ReadableStreamDefaultReader.prototype.hasOwnProperty(Symbol.asyncIterator)) {
 				Object.defineProperty(ReadableStreamDefaultReader.prototype, Symbol.asyncIterator, {
@@ -108,17 +109,17 @@
 			message = "An error occurred.";
 		}
 
-		chatClient.messages = [...chatClient.messages, { role: "bot", content: message },];
+		auctionAgent.messages = [...auctionAgent.messages, { role: "bot", content: message },];
 	}
 
 	function displayBotMessageAsync(chunks: string[], chunk: string) {
 		if (chunk) {
-			if (chatClient.messages[chatClient.messages.length - 1].role === "user") {
+			if (auctionAgent.messages[auctionAgent.messages.length - 1].role === "user") {
 				chunks.push(chunk);
-				chatClient.messages = [...chatClient.messages, { role: "bot", content: chunk },];
+				auctionAgent.messages = [...auctionAgent.messages, { role: "bot", content: chunk },];
 			} else {
 				chunks.push(chunk);
-				chatClient.messages[chatClient.messages.length - 1].content = markdownDecoder.render(chunks.join(""));
+				auctionAgent.messages[auctionAgent.messages.length - 1].content = markdownDecoder.render(chunks.join(""));
 			}
 		}
 	}
@@ -148,7 +149,7 @@
 	 async function handleClick(event: MouseEvent) {
 		try {
 			if (event.shiftKey) {
-				chatClient.userChatPrompt += "\n";
+				auctionAgent.userChatPrompt += "\n";
 			} else {
 				await sendChatMessageAsync(event);
 			}
@@ -188,39 +189,191 @@
 			console.error(error);
 		}
 	});
-
 </script>
 
-<div id="chat-window" bind:this={chatWindowElement}
-	 class="w-full h-96 overflow-auto p-4 bg-surface-200 rounded-lg variant-filled-surface">
-	{#each chatClient.messages as message, index (index)}
-		<div class="{message.role}
-					{`message p-2 mb-2 rounded-lg ${message.role === 'user' ?
-						'bg-blue-400 text-white ml-auto' :
-						'bg-gray-400 text-black mr-auto'}`}">
-			<p class="prose">{@html message.content}</p>
-		</div>
-	{/each}
-</div>
+<div class="chat-container">
+	<!-- Input Section -->
+	<div class="input-section">
+		<input bind:value={auctionAgent.auctionTitle}
+			   class="title-input"
+			   placeholder="Enter auction title..."
+			   maxlength="80"
+		/>
 
-<div id="mbot-prompt" class="mt-4 flex items-center">
-	<textarea bind:value={chatClient.userChatPrompt}
-			  on:keydown={handleKeyDown}
-			  class="bg-surface-200 ring-0 flex-grow mx-2 p-2
-						rounded-lg border-2 border-gray-200 text-black"
-			  name="prompt"
-			  id="prompt"
-			  placeholder="Write a message..."
-			  rows="1"
-	/>
-	<button class="variant-filled-primary bg-blue-500 text-white p-2
-						rounded-lg"
-			on:click={handleClick}>Send</button>
+		<textarea bind:value={auctionAgent.auctionDescription}
+				  class="description-input"
+				  placeholder="Paste auction description..."
+				  rows={6}
+		/>
+
+		<button class="send-button" on:click={handleClick}>
+		Generate Auction Details
+		</button>
+	</div>
+
+	<!-- Output Section -->
+	<div class="output-section">
+		<div class="html-preview">
+			<h3>Generated Listing HTML</h3>
+			<div class="html-content">
+				{@html auctionAgent.generatedHTML}
+			</div>
+		</div>
+
+		<div class="auction-details">
+			<h3>Auction Details</h3>
+			<div class="details-grid">
+				<div class="detail-item">
+					<label for="final-title">Title:</label>
+					<div id="final-title" class="detail-value">{auctionAgent.finalTitle}</div>
+				</div>
+				<!-- Add other detail items here -->
+			</div>
+		</div>
+	</div>
+
+	<!-- Chat History -->
+	<div id="chat-window" bind:this={chatWindowElement} class="chat-history">
+		{#each auctionAgent.messages as message, index (index)}
+		<div class={`message ${message.role}`}>
+			<p>{@html message.content}</p>
+		</div>
+		{/each}
+	</div>
 </div>
 
 <style>
-	.message {
-		max-width: 80%;
-		word-wrap: break-word;
+	/* Base styles */
+	.chat-container {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		padding: 1rem;
+		color: var(--text-color);
+	}
+
+	.input-section {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.title-input, .description-input {
+		width: 100%;
+		padding: 0.75rem;
+		border-radius: 0.5rem;
+		border: 1px solid var(--border-color);
+		background-color: var(--input-bg);
+		color: var(--text-color);
+	}
+
+	.description-input {
+		min-height: 120px;
+		resize: vertical;
+	}
+
+	.send-button {
+		padding: 0.75rem 1.5rem;
+		border-radius: 0.5rem;
+		background-color: var(--primary-color);
+		color: white;
+		font-weight: 500;
+		cursor: pointer;
+		transition: background-color 0.2s;
+	}
+
+	.send-button:hover {
+		background-color: var(--primary-hover);
+	}
+
+	.output-section {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.html-preview, .auction-details {
+		padding: 1.5rem;
+		border-radius: 0.75rem;
+		background-color: var(--surface-color);
+	}
+
+	.html-content {
+		max-height: 300px;
+		overflow-y: auto;
+		background-color: var(--content-bg);
+		padding: 1rem;
+		border-radius: 0.5rem;
+		margin-top: 1rem;
+	}
+
+	.details-grid {
+		display: grid;
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .detail-value {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: var(--content-bg);
+  }
+
+  .chat-history {
+    height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: var(--surface-color);
+  }
+
+  .message {
+    max-width: 80%;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.75rem;
+    word-wrap: break-word;
+  }
+
+  .message.user {
+    background-color: var(--user-message-bg);
+    color: white;
+    margin-left: auto;
+  }
+
+  .message.bot {
+    background-color: var(--bot-message-bg);
+    margin-right: auto;
+  }
+
+  /* Light mode variables */
+  :global(:root) {
+    --text-color: #1a1a1a;
+    --border-color: #e2e8f0;
+    --input-bg: #ffffff;
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --surface-color: #f8fafc;
+    --content-bg: #ffffff;
+    --user-message-bg: #3b82f6;
+    --bot-message-bg: #e2e8f0;
+  }
+
+	/* Dark mode variables */
+	:global(.dark) {
+		--text-color: #ffffff;
+		--border-color: #4a5568;
+		--input-bg: #2d3748;
+		--primary-color: #2563eb;
+		--primary-hover: #1e4bb5;
+		--surface-color: #2d3748;
+		--content-bg: #4a5568;
+		--user-message-bg: #2563eb;
+		--bot-message-bg: #4a5568;
 	}
 </style>

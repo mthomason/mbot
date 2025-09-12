@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, validator
 import json
 
+from app.api.v1.endpoints import auction
 from app.api.v1.endpoints import chat
 from app.api.v1.endpoints import users
 from mserv.mbot_config import MBotConfig, FastApiConnSettings
@@ -31,6 +32,7 @@ fastapi_app.add_middleware(
 
 fastapi_app.include_router(chat.router)
 fastapi_app.include_router(users.router)
+fastapi_app.include_router(auction.router)
 
 @fastapi_app.get("/")
 def read_root() -> dict[str, str]:

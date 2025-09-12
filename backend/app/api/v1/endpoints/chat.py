@@ -53,16 +53,6 @@ async def get_chat_response_async(message: str) -> openai.AsyncStream[ChatComple
 					stream = True
 				)
 
-async def get_chat_response_async_legacy(message: str) -> Any:
-	return await openai.ChatCompletion.acreate(
-					model = "gpt-4o-mini",
-					messages = [
-						{"role": "system", "content": "You are a helpful assistant."},
-						{"role": "user", "content": message},
-						],
-					stream = True
-				)
-
 def handle_openai_status_error(e: openai.APIStatusError, user_id: str) -> Generator[str, None, None]:
 	error_array: list[str] = e.message.split(" ")
 	max_index: int = len(error_array) - 1
@@ -74,9 +64,9 @@ def handle_openai_status_error(e: openai.APIStatusError, user_id: str) -> Genera
 
 # Get the current user ID from the request
 async def get_current_user_id(request: Request) -> str:
-	auth_token: str = request.headers.get('Authorization')
+	auth_token: str | None = request.headers.get('Authorization')
 	if not auth_token:
-		raise HTTPException(status_code=401, detail="Token is missing")
+		raise HTTPException(status_code=401, detail="Token is mis sing")
 
 	auth_token = auth_token.replace("Bearer ", "")
 
@@ -104,11 +94,13 @@ async def chat_endpoint_async(chat_message: ChatMessage,
 
 	async def event_stream_json_async() -> AsyncGenerator[str, None]:
 		try:
-			response: ChatCompletionChunk | None = await get_chat_response_async(chat_message.message)
+			response: openai.AsyncStream[ChatCompletionChunk] | None = await get_chat_response_async(chat_message.message)
 			is_end: bool = False
+			if response is None:
+				raise HTTPException(status_code=500, detail="Failed to get OpenAI response")
 			async for chunk in response:
 				is_end = chunk.choices[0].finish_reason == "stop"
-				content: str = chunk.choices[0].delta.content
+				content: str | None = chunk.choices[0].delta.content
 				if not content: content = ""
 				yield ChatResponse(user_id=user_id,
 								   content=content,
@@ -116,15 +108,15 @@ async def chat_endpoint_async(chat_message: ChatMessage,
 
 		except openai.RateLimitError as e:
 			for response in handle_openai_status_error(e, user_id):
-				yield response
+				yield str(response)
 
 		except openai.AuthenticationError as e:
 			for response in handle_openai_status_error(e, user_id):
-				yield response
+				yield str(response)
 
 		except openai.APIStatusError as e:
 			for response in handle_openai_status_error(e, user_id):
-				yield response
+				yield str(response)
 
 		except openai.APIError as e:
 			raise HTTPException(status_code=500, detail=str(e.message))

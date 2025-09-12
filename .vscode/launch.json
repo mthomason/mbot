@@ -38,7 +38,7 @@
 			"name": "mbotclient",
 			"type": "node",
 			"request": "launch",
-			"runtimeExecutable": "npm",
+			"runtimeExecutable": "/Users/michael/.nvm/versions/node/v22.19.0/bin/npm",
 			"runtimeArgs": [
 				"run",
 				"dev"

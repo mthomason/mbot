@@ -64,5 +64,5 @@
 		"wcwidth",
 		"yarl"
 	],
-	"python.defaultInterpreterPath": "/Users/michael/Projects/mbot/mbot-env12/bin/python3"
+	"python.defaultInterpreterPath": "/Users/michael/Projects/mbot/venv/bin/python3"
 }
