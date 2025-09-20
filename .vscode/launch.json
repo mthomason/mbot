@@ -23,7 +23,7 @@
 			"webRoot": "${workspaceFolder}/electron"
 		}, {
 			"name": "mbotserv",
-			"type": "python",
+			"type": "debugpy",
 			"request": "launch",
 			"module": "uvicorn",
 			"args": [
