@@ -1,42 +1,42 @@
 # --- General Source Code ---
-*.py           text linguist-detectable # Python source
-*.js           text linguist-detectable # JavaScript source
-*.ts           text linguist-detectable # TypeScript source
-*.html         text linguist-detectable # HTML files
-*.svelte       text linguist-detectable # Svelte files
-*.css          text linguist-detectable # Stylesheets
-*.postcss      text linguist-detectable # PostCSS config
+*.py           text linguist-detectable
+*.js           text linguist-detectable
+*.ts           text linguist-detectable
+*.html         text linguist-detectable
+*.svelte       text linguist-detectable
+*.css          text linguist-detectable
+*.postcss      text linguist-detectable
 
 # --- Documentation ---
-*.md           text linguist-documentation # Markdown docs
-*.txt          text linguist-documentation # Text files
+*.md           text linguist-documentation
+*.txt          text linguist-documentation
 
 # --- Configuration Files ---
-*.json         text linguist-vendored  # JSON configs
-*.config       text linguist-vendored  # General configs
-*.cjs          text linguist-vendored  # CommonJS configs
-*.npmrc        text linguist-vendored  # npm config
+*.json         text linguist-vendored
+*.config       text linguist-vendored
+*.cjs          text linguist-vendored
+*.npmrc        text linguist-vendored
 
 # --- Scripts ---
-*.sh           text eol=lf            # Shell scripts (Unix LF endings)
-*.bat          text eol=crlf          # Batch scripts (Windows CRLF endings)
+*.sh           text eol=lf
+*.bat          text eol=crlf
 
 # --- Binary Files ---
-*.png          binary linguist-detectable  # Image files
-*.gif          binary linguist-detectable  # GIFs and animations
+*.png          binary linguist-detectable
+*.gif          binary linguist-detectable
 
 # --- Build Artifacts & Generated Files ---
-dist/*         linguist-generated     # Build output
-*.lock         text linguist-vendored # Lock files for dependency managers
+dist/*         linguist-generated
+*.lock         text linguist-vendored
 
 # --- Editor & Tooling ---
-.vscode/*      linguist-vendored      # VSCode settings
-*.eslintrc.cjs text linguist-vendored # ESLint config
+.vscode/*      linguist-vendored
+*.eslintrc.cjs text linguist-vendored
 
 # --- Dependencies (Vendored) ---
-node_modules/* linguist-vendored      # npm modules
-frontend/package-lock.json linguist-vendored # Frontend lock file
-electron/package-lock.json linguist-vendored # Electron lock file
+node_modules/* linguist-vendored
+frontend/package-lock.json linguist-vendored
+electron/package-lock.json linguist-vendored
 
 # --- Miscellaneous ---
 .gitignore     text linguist-vendored
