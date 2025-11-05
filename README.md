@@ -12,8 +12,6 @@ This project is designed for:
 - **Developers** exploring Svelte and FastAPI.
 - **Hobbyists** experimenting with OpenAI's GPT models.
 
----
-
 ## Features
 
 - Modern Frontend: Built with SvelteKit for reactive UI.  
@@ -21,13 +19,9 @@ This project is designed for:
 - Secure Authentication: Firebase for user authentication.  
 - Boilerplate for AI Apps: A great foundation for interactive AI chat solutions.  
 
----
-
 ## Demo
 
 <img src="docs/mbot-demo.gif" alt="mbot Demo" width="220">
-
----
 
 ## Table of Contents
 
@@ -36,10 +30,9 @@ This project is designed for:
 3. [Project Structure](#project-structure)  
 4. [Environment Variables](#environment-variables)  
 5. [Running the Project](#running-the-project)  
-6. [Contributing](#contributing)  
-7. [License](#license)  
-
----
+6. [Authentication](#authentication)  
+7. [Contributing](#contributing)  
+8. [License](#license)  
 
 ## Getting Started
 
@@ -85,8 +78,6 @@ See Environment Variables
 
 #### 5. Run the project (see Running the Project)
 
----
-
 ## Project Structure
 
 ```bash
@@ -98,21 +89,20 @@ electron/         # Optional Electron app (if applicable)
 docs/             # Documentation files
 ```
 
----
-
 ## Environment Variables
 
-Create a `.env` file in the root directory and set the following:  
+To configure your environment variables, create a `.env` file in the root directory of the project with the following structure:
 
 ```bash
-GOOGLE_PROJECT_ID_MBOT=your-firebase-project-id  
-OPENAI_API_KEY_MBOT=your-openai-api-key  
+# Used for Firebase authentication
+GOOGLE_PROJECT_ID_MBOT=my-firebase-project-id 
+
+# Used for OpenAI services
+OPENAI_API_KEY_MBOT=sk-xxxxxxxxxxxxxxxxxxxx
 ```
 
-- GOOGLE_PROJECT_ID_MBOT: Firebase project ID for authentication.  
-- OPENAI_API_KEY_MBOT: API key for OpenAI services (note: usage may incur costs).  
-
----
+- **GOOGLE_PROJECT_ID_MBOT**: Your Firebase project ID, used for authentication.
+- **OPENAI_API_KEY_MBOT**: Your API key for OpenAI services. Remember that usage may incur costs.
 
 ## Running the Project
 
@@ -139,7 +129,11 @@ cd frontend
 npm run dev
 ```
 
----
+## Authentication
+
+To use the chat functionality, you must be authenticated. This is a deliberate feature of this starter project to demonstrate how to protect routes and integrate authentication in a modern web application.
+
+**Note:** Currently, there is no warning message if you attempt to use the chat without being authenticated. The chat simply will not respond. This is a known issue and will be addressed in a future update.
 
 ## Contributing
 
@@ -148,10 +142,6 @@ Contributions are welcome! Please fork the repo and submit a pull request. Befor
 1. Write clear documentation for new features.  
 2. Follow the existing code style.  
 
----
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
