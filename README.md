@@ -14,10 +14,10 @@ This project is designed for:
 
 ## Features
 
-- Modern Frontend: Built with SvelteKit for reactive UI.  
-- FastAPI Backend: Async API integration with OpenAI.  
-- Secure Authentication: Firebase for user authentication.  
-- Boilerplate for AI Apps: A great foundation for interactive AI chat solutions.  
+- Modern Frontend: Built with SvelteKit for reactive UI.
+- FastAPI Backend: Async API integration with OpenAI.
+- Secure Authentication: Firebase for user authentication.
+- Boilerplate for AI Apps: A great foundation for interactive AI chat solutions.
 
 ## Demo
 
@@ -25,26 +25,26 @@ This project is designed for:
 
 ## Table of Contents
 
-1. [Features](#features)  
-2. [Getting Started](#getting-started)  
-3. [Project Structure](#project-structure)  
-4. [Environment Variables](#environment-variables)  
-5. [Running the Project](#running-the-project)  
-6. [Authentication](#authentication)  
-7. [Contributing](#contributing)  
-8. [License](#license)  
+1. [Features](#features)
+2. [Getting Started](#getting-started)
+3. [Project Structure](#project-structure)
+4. [Environment Variables](#environment-variables)
+5. [Running the Project](#running-the-project)
+6. [Authentication](#authentication)
+7. [Contributing](#contributing)
+8. [License](#license)
 
 ## Getting Started
 
 ### Prerequisites
 
-1. Node.js  
+1. Node.js
     Install from [Node.js official site](https://nodejs.org).
-2. Python  
+2. Python
     Install from [Python's official site](https://www.python.org).
-3. Firebase Project  
+3. Firebase Project
     Create a Firebase project for authentication (free tier is sufficient).
-4. OpenAI API Key  
+4. OpenAI API Key
     Obtain an API key from [OpenAI's platform](https://platform.openai.com).
 
 ### Installation
@@ -52,17 +52,17 @@ This project is designed for:
 #### 1. Clone the Repository
 
 ```bash
-    git clone https://github.com/mthomason/mbot.git  
-    cd mbot  
+git clone https://github.com/mthomason/mbot.git
+cd mbot
 ```
 
 #### 2. Set Up the Backend
 
 ```bash
-cd backend  
-python -m venv venv  
-source venv/bin/activate (On Windows: venv\Scripts\activate)  
-pip install -r requirements.txt  
+cd backend
+python -m venv venv
+source venv/bin/activate (On Windows: venv\Scripts\activate)
+pip install -r requirements.txt
 ```
 
 #### 3. Set Up the Frontend
@@ -74,7 +74,7 @@ npm install
 
 #### 4. Add your Environment Variables
 
-See Environment Variables
+See [Environment Variables](#environment-variables)
 
 #### 5. Run the project (see Running the Project)
 
@@ -106,13 +106,18 @@ OPENAI_API_KEY_MBOT=sk-xxxxxxxxxxxxxxxxxxxx
 
 ## Running the Project
 
-Use the provided VSCode debug configuration for ease of use. Follow these steps:  
+This project was developed using Visual Studio Code as the IDE and includes a pre-configured launch profile for a seamless startup experience.
 
-1. Open the project in VSCode.  
-2. Select the `Launch mbot client and server` configuration.  
-3. Press F5 to start debugging.  
+The recommended way to run the application is by using the provided "Launch mbot (client and server)" debug configuration. The configuration file, `launch.json`, is included in the `.vscode` folder.
 
-Alternatively, run the components manually:  
+To run the project:
+
+1. Open the project root in VSCode.
+2. Navigate to the "Run and Debug" view (usually in the left-hand sidebar).
+3. Select the `Launch mbot (client and server)` configuration from the dropdown menu.
+4. Press F5 or click the green play button to start both the frontend and backend servers.
+
+Alternatively, you can run the components manually:
 
 ### Backend
 
@@ -137,10 +142,10 @@ To use the chat functionality, you must be authenticated. This is a deliberate f
 
 ## Contributing
 
-Contributions are welcome! Please fork the repo and submit a pull request. Before contributing, make sure to:  
+Contributions are welcome! Please fork the repo and submit a pull request. Before contributing, make sure to:
 
-1. Write clear documentation for new features.  
-2. Follow the existing code style.  
+1. Write clear documentation for new features.
+2. Follow the existing code style.
 
 ## License
 
