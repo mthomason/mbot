@@ -17,10 +17,9 @@ class FirebaseTokenVerifier:
 
 	def _fetch_google_certs(self) -> dict:
 		response = requests.get(self.GOOGLE_CERTS_URL)
-		if response.status_code == 200:
-			return response.json()
-		else:
+		if response.status_code != 200:
 			response.raise_for_status()
+		return response.json()
 
 	#def _fetch_google_certs(self) -> dict:
 	#	return requests.get(self.GOOGLE_CERTS_URL).json()
@@ -32,7 +31,7 @@ class FirebaseTokenVerifier:
 		unverified_header = jwt.get_unverified_header(token)
 		kid: str = unverified_header['kid']
 		auth_algorithm: str = unverified_header['alg']
-		key: str | None = None
+		key: str = ""
 
 		# Find the key we need based on the Key ID
 		if kid in certs:
