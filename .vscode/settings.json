@@ -32,6 +32,7 @@
 		"matplotlib",
 		"mbot",
 		"mbotfbase",
+		"mserv",
 		"multidict",
 		"openai",
 		"parso",
@@ -61,6 +62,7 @@
 		"traitlets",
 		"urllib",
 		"uvicorn",
+		"venv",
 		"wcwidth",
 		"yarl"
 	],
