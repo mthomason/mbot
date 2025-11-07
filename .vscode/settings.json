@@ -2,7 +2,16 @@
 	"cSpell.ignorePaths": [
 		"requirements.txt",
 		".gitignore",
-		"launch.json"
+		"launch.json",
+		"settings.json",
+		"venv",
+		".git",
+		".DS_Store",
+		".mypy_cache",
+		"package-lock.json",
+		"**/*.pyc",
+		"**/__pycache__/**",
+		".svelte-kit"
 	],
 	"cSpell.words": [
 		"aioboto",
