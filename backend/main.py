@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# File: main.py
+# File: backend/main.py
 
 from typing import List
 from fastapi import FastAPI
@@ -8,9 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, validator
 import json
 
-from app.api.v1.endpoints import auction
 from app.api.v1.endpoints import chat
-from app.api.v1.endpoints import users
 from mserv.mbot_config import MBotConfig, FastApiConnSettings
 from mserv.mbot_delegate import MbotDelegate
 
@@ -31,8 +29,6 @@ fastapi_app.add_middleware(
 )
 
 fastapi_app.include_router(chat.router)
-fastapi_app.include_router(users.router)
-fastapi_app.include_router(auction.router)
 
 @fastapi_app.get("/")
 def read_root() -> dict[str, str]:

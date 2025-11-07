@@ -4,7 +4,6 @@
 
 	let items: {title: string; content: string; anchor: string; }[] = [
 		{ title: 'Home', content: 'Home', anchor: '/' },
-		{ title: 'Auction Agent', content: 'AuctionAgent', anchor: '/auction' },
 		{ title: 'Chat', content: 'Chat', anchor: '/chat' },
 		{ title: 'Account', content: 'Account', anchor: '/account' },
 		{ title: 'Browser', content: 'Browser', anchor: '/browser' },

@@ -24,20 +24,6 @@ class MBotConfig(BaseModel):
 		log_level: str
 		connection_settings: ConnectionSettings = Field(default_factory=ConnectionSettings)
 
-		class DatabaseSettings(BaseModel):
-
-			class DynamoDBSettings(BaseModel):
-				region_name: str
-				endpoint_url: str
-
-			class Sqlite3Settings(BaseModel):
-				database: str = ":memory:"  # Default to in-memory database
-
-			dynamodb: DynamoDBSettings = Field(default_factory=DynamoDBSettings)
-			sqlite3: Sqlite3Settings = Field(default_factory=Sqlite3Settings)
-
-		database_settings: DatabaseSettings = Field(default_factory=DatabaseSettings)
-
 	name: str
 	version: str
 	description: str
@@ -58,6 +44,4 @@ class MBotConfig(BaseModel):
 	def unload(self) -> dict:
 		return self.model_dump()
 
-type DynamoDbSettings = MBotConfig.ApplicationConfig.DatabaseSettings.DynamoDBSettings
-type Sqlite3Settings = MBotConfig.ApplicationConfig.DatabaseSettings.Sqlite3Settings
 type FastApiConnSettings = MBotConfig.ApplicationConfig.ConnectionSettings
