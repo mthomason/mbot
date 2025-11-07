@@ -1,4 +1,9 @@
 {
+	"cSpell.ignorePaths": [
+		"requirements.txt",
+		".gitignore",
+		"launch.json"
+	],
 	"cSpell.words": [
 		"aioboto",
 		"aiobotocore",
