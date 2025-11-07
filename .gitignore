@@ -1,6 +1,4 @@
 # .gitignore
-mbot-env/
-mbot-env12/
 venv/
 
 *.pyc
