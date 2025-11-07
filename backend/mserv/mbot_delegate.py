@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# File: mserv/mbot_delegate.py
+# File: backend/mserv/mbot_delegate.py
 
 from fastapi import FastAPI
 from contextlib import asynccontextmanager

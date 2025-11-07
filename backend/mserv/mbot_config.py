@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# File: mserv/mbot_config.py
+# File: backend/mserv/mbot_config.py
 
 import json
 from pydantic import BaseModel, validator, Field

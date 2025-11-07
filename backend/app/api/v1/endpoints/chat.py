@@ -1,5 +1,6 @@
-# /backend/app/api/v1/endpoints/chat.py
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# File: backend/app/api/v1/endpoints/chat.py
 
 import asyncio
 from fastapi import APIRouter, HTTPException, Request, status
