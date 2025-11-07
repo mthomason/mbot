@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.params import Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from typing import AsyncGenerator, Any, Optional, Tuple, Callable, TypeVar, Union, Generator
+from typing import AsyncGenerator, Optional, Generator, Annotated
 from uuid import UUID
 from openai.types.chat import ChatCompletionChunk
 from mserv.utilities.firebase_token_verifier import FirebaseTokenVerifier
@@ -16,13 +16,13 @@ import openai
 OPENAI_PREVIEW: bool = True
 
 # Load the OpenAI API key from the environment variables
-OPENAI_API_KEY: str | None = os.getenv("OPENAI_API_KEY_MBOT")
-if OPENAI_API_KEY is None:
+OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY_MBOT", default="")
+if OPENAI_API_KEY == "":
 	raise Exception("OpenAI API key not found in environment variables")
 
 # Load the Google Project ID from the environment variables
-GOOGLE_PROJECT_ID: str | None = os.getenv("GOOGLE_PROJECT_ID_MBOT")
-if GOOGLE_PROJECT_ID is None:
+GOOGLE_PROJECT_ID: str = os.getenv("GOOGLE_PROJECT_ID_MBOT", default="")
+if GOOGLE_PROJECT_ID == "":
 	raise Exception("Google Project ID not found in environment variables")
 
 router: APIRouter = APIRouter()
@@ -71,7 +71,7 @@ async def get_current_user_id(request: Request) -> str:
 	auth_token = auth_token.replace("Bearer ", "")
 
 	verifier: FirebaseTokenVerifier = FirebaseTokenVerifier(GOOGLE_PROJECT_ID)
-	user_id: str = verifier.get_user_id(auth_token)
+	user_id: Optional[str] = verifier.get_user_id(auth_token)
 
 	if user_id is None:
 		raise HTTPException(status_code=401, detail="User not authenticated")
@@ -80,7 +80,7 @@ async def get_current_user_id(request: Request) -> str:
 
 @router.post("/chat", status_code=status.HTTP_200_OK)
 async def chat_endpoint_async(chat_message: ChatMessage,
-							  user_id: str = Depends(get_current_user_id)) -> StreamingResponse:
+							  user_id: Annotated[str, Depends(get_current_user_id)]) -> StreamingResponse:
 	if chat_message.message is None:
 		raise HTTPException(status_code=400, detail="No message provided")
 	if len(chat_message.message) == 0:
@@ -107,16 +107,16 @@ async def chat_endpoint_async(chat_message: ChatMessage,
 								   is_end=is_end).model_dump_json() + "\n"
 
 		except openai.RateLimitError as e:
-			for response in handle_openai_status_error(e, user_id):
-				yield str(response)
+			for error_msg in handle_openai_status_error(e, user_id):
+				yield str(error_msg)
 
 		except openai.AuthenticationError as e:
-			for response in handle_openai_status_error(e, user_id):
-				yield str(response)
+			for error_msg in handle_openai_status_error(e, user_id):
+				yield str(error_msg)
 
 		except openai.APIStatusError as e:
-			for response in handle_openai_status_error(e, user_id):
-				yield str(response)
+			for error_msg in handle_openai_status_error(e, user_id):
+				yield str(error_msg)
 
 		except openai.APIError as e:
 			raise HTTPException(status_code=500, detail=str(e.message))
