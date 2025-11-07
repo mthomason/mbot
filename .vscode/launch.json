@@ -4,24 +4,6 @@
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [{
-			"name": "mbotapp-main",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}/electron",
-			"runtimeExecutable": "${workspaceFolder}/electron/node_modules/.bin/electron",
-			"windows": {
-				"runtimeExecutable": "${workspaceFolder}/electron/node_modules/.bin/electron.cmd"
-			},
-			"args": [".", "--remote-debugging-port=9222"],
-			"outputCapture": "std",
-			"console": "integratedTerminal"
-		}, {
-			"name": "mbotapp-renderer",
-			"port": 9222,
-			"request": "attach",
-			"type": "chrome",
-			"webRoot": "${workspaceFolder}/electron"
-		}, {
 			"name": "mbotserv",
 			"type": "debugpy",
 			"request": "launch",
@@ -57,9 +39,5 @@
 	"compounds": [{
 			"name": "Launch mbot (client and server)",
 			"configurations": ["mbotserv", "mbotclient", "mbotclient-chrome"]
-		}, {
-			"name": "Launch mbotapp (main and renderer)",
-			"configurations": ["mbotapp-main", "mbotapp-renderer"]
-		}
-	]
+		}]
 }
