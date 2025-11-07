@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from typing import AsyncGenerator, Any, Optional, Tuple, Callable, TypeVar, Union, Generator
 from uuid import UUID
 from openai.types.chat import ChatCompletionChunk
-from app.api.v1.utilites.firebase_token_verifier import FirebaseTokenVerifier
+from mserv.utilities.firebase_token_verifier import FirebaseTokenVerifier
 import os
 import openai
 from openai import AsyncStream

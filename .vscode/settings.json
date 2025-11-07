@@ -67,5 +67,5 @@
 		"wcwidth",
 		"yarl"
 	],
-	"python.defaultInterpreterPath": "/Users/michael/Projects/mbot/venv/bin/python3"
+	"python.analysis.extraPaths": ["./backend"]
 }
