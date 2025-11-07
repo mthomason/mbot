@@ -12,7 +12,7 @@ class MbotDelegate:
 	_lock = threading.Lock()  # Protects '_instance' during its first assignment
 	_is_initialized: bool = False
 	_is_loaded: bool = False
-	fastapi_app: FastAPI
+	fastapi_app: FastAPI | None
 	mbotconfig: MBotConfig
 
 	def __new__(cls, *args, **kwargs):
@@ -44,7 +44,7 @@ class MbotDelegate:
 		yield
 		print("App Shutdown Events")
 
-	def is_initalized(self) -> bool:
+	def is_initialized(self) -> bool:
 		return self._is_initialized
 
 	def unload(self) -> dict:
