@@ -29,11 +29,13 @@
 	<main>
 		<div class="w-full h-96 bg-center">
 			{#if user}
-				<img src={user?.photoURL} alt={user?.displayName} class="h-12 w-12 avatar circle float-left" />
-				<h3 class="h3">{user?.displayName}</h3>
-				<p>{user?.email}</p>
-				<p>Logged in with Google</p>
-				<button on:click|stopPropagation={logout} class="logout-button">Logout</button>
+				<img src={user?.photoURL} alt={user?.displayName} class="h-12 w-12 avatar rounded-full float-left mr-4" />
+				<div class="font-sans">
+					<h3 class="h3 font-sans">{user?.displayName}</h3>
+					<p class="font-sans">{user?.email}</p>
+					<p class="italic font-sans mt-4">Logged in with Google</p>
+					<button on:click|stopPropagation={logout} class="btn variant-filled-primary mt-4">Logout</button>
+				</div>
 			{:else}
 				<div class="h-12">
 					<p>You are not logged into the application.  Please login to continue.</p>

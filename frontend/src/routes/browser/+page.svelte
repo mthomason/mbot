@@ -98,31 +98,15 @@
 	</header>
 	<main>
 		<div class="w-full h-96 bg-center">
-			<h1>Browser Information</h1>
-			<ul>
+			<ul class="list-none p-0">
 				{#if (browserInfo != null)}
 					{#each Object.entries(browserInfo) as [key, value]}
-						<li><strong>{key}:</strong> {value}</li>
+						<li class="my-2"><strong>{key}:</strong> {value}</li>
 					{/each}
 				{:else}
-					<li>Browser information not available</li>
+					<li class="my-2">Browser information not available</li>
 				{/if}
 			</ul>
 		</div>
 	</main>
 </div>
-
-<style>
-	div {
-	  margin: 0 auto;
-	  padding: 20px;
-	  max-width: 600px;
-	}
-	ul {
-	  list-style: none;
-	  padding: 0;
-	}
-	li {
-	  margin: 10px 0;
-	}
-</style>
