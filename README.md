@@ -113,9 +113,11 @@ The recommended way to run the application is by using the provided "Launch mbot
 To run the project:
 
 1. Open the project root in VSCode.
-2. Navigate to the "Run and Debug" view (usually in the left-hand sidebar).
-3. Select the `Launch mbot (client and server)` configuration from the dropdown menu.
-4. Press F5 or click the green play button to start both the frontend and backend servers.
+2. After you've created the `venv` virtual environment, VS Code should automatically detect it and ask if you want to use it for the workspace. Click "Yes" to accept.
+3. If you are not prompted, you can manually select the interpreter by opening the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`) and typing "Python: Select Interpreter". Choose the interpreter located in the `venv/bin` (or `venv\Scripts` on Windows) directory.
+4. Navigate to the "Run and Debug" view (usually in the left-hand sidebar).
+5. Select the `Launch mbot (client and server)` configuration from the dropdown menu.
+6. Press F5 or click the green play button to start both the frontend and backend servers.
 
 Alternatively, you can run the components manually:
 
