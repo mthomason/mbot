@@ -1,12 +1,33 @@
-# .gitignore
+# Python specific files
 venv/
-
 *.pyc
 __pycache__/
 
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
 
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Ignore env file with API keys 
 .env
 
-#Ignore NodeJS modules.
+# Ignore NodeJS modules.  There is another `.gitignore` files in the `./frontend` folder.
 node_modules
+
+# Temporary files
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+
+# VSCode settings and local history
+.history/
