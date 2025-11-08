@@ -2,6 +2,8 @@
 layout: home
 ---
 
+# mbot - Your AI Chatbot Template 💬🤖
+
 mbot is a powerful and flexible open-source template designed for developers to build, customize, and deploy their own AI-powered chatbots. It provides a solid foundation with a modern SvelteKit frontend and a robust FastAPI backend, allowing you to focus on creating unique and engaging conversational experiences.
 
 Whether you're building a customer service bot, a personal assistant, or a novel AI application, mbot comes with the essential features already set up, including user authentication and a clean, responsive user interface.
