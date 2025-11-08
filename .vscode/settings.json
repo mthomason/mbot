@@ -11,7 +11,11 @@
 		"package-lock.json",
 		"**/*.pyc",
 		"**/__pycache__/**",
-		".svelte-kit"
+		".svelte-kit",
+		"docs/_config.yml",
+		"docs/Gemfile.lock",
+		"docs/Gemfile"
+
 	],
 	"cSpell.words": [
 		"aioboto",
