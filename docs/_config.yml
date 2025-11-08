@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: "mbot - AI Chatbot Template 💬🤖"
+title: "mbot 💬🤖"
 description: "mbot is a powerful and flexible template for developers to build, customize, and deploy their own AI-powered chatbots with SvelteKit and FastAPI."
 baseurl: "/mbot" # the subpath of your site, e.g. /blog
 url: "https://mthomason.github.io" # the base hostname & protocol for your site, e.g. http://example.com
