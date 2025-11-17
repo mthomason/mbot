@@ -4,7 +4,22 @@
 
 ## Overview
 
-**mbot** is an open-source starter project for building AI-powered chatbot applications. Combining a modern tech stack of **Svelte** for the frontend and **FastAPI** for the backend, it provides Firebase authentication and integrates seamlessly with OpenAI APIs.
+**mbot** is an open-source starter project for building AI-powered chatbot applications. Combining a modern tech stack of **Svelte** for the frontend and **FastAPI** for the backend, it provides Firebase authentication and integrates seamlessly with OpenAI APIs.  It should work with any of the major AI providers.
+
+This project currently uses the following tools and packages on the frontend:
+
+- [Typescript](https://www.typescriptlang.org/docs/) for programming the frontend
+- [SvelteKit](https://svelte.dev/docs/kit/introduction) v2 for routing
+- [Skeleton](https://www.skeleton.dev/) v4 for theming and components
+- [Tailwind CSS](https://tailwindcss.com/) v4 for style
+- [Firebase](https://firebase.google.com/docs/auth) for authentication
+- [Vite](https://vite.dev/) v7 for building
+
+The backend is build using the following:
+
+- [Python3](https://docs.python.org/3.13/) for the backend
+- [FastAPI](https://fastapi.tiangolo.com/) for backend server
+- [OpenAI-Python](https://github.com/openai/openai-python) for chat completions (_works with other services like Google Gemini_)
 
 This project is designed for:
 
