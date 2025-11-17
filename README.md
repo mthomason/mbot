@@ -62,7 +62,15 @@ cd mbot
 cd backend
 python -m venv venv
 source venv/bin/activate (On Windows: venv\Scripts\activate)
-pip install -r requirements.txt
+pip install -r ../requirements.txt
+```
+
+Alternatively, you can install the `.venv` in the projects root directory
+
+```bash
+python -m venv .venv
+source .venv/bin/activate (On Windows: .venv\Scripts\activate)
+pip install requirements.txt
 ```
 
 #### 3. Set Up the Frontend
