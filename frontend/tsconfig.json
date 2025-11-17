@@ -2,6 +2,7 @@
 	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
 		"allowJs": true,
+		"allowImportingTsExtensions": true,
 		"checkJs": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
@@ -12,6 +13,12 @@
 		"preserveValueImports": false,
 		"importsNotUsedAsValues": "remove",
 		"typeRoots": ["./types", "./node_modules/@types"],
-		"verbatimModuleSyntax": true
+		"types": ["svelte"],
+		"verbatimModuleSyntax": true,
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"target": "ES2022",
+		"isolatedModules": true
 	},
+	"include": ["src", "vite.config.ts", "tests"]
 }

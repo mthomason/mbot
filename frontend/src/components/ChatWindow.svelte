@@ -3,8 +3,8 @@
 <script lang="ts">
 	import { onMount, afterUpdate } from "svelte";
 	import MarkdownIt from "markdown-it";
-	import ChatClient from "../lib/ChatClient";
-	import { authentication } from "../stores/auth.store";
+	import ChatClient from "../lib/ChatClient.ts";
+	import { authentication } from "../stores/auth.store.ts";
 
 	let chatClient: ChatClient = new ChatClient();
 	let chatWindowElement: HTMLDivElement;
@@ -62,9 +62,8 @@
 								let dataPart: string = pc.trim();
 								if (dataPart.length > 0) {
 									const chatChunk = JSON.parse(pc);
-									if (!chatChunk.is_end) {
-										await displayBotMessageAsync(messageInMarkdownArray, chatChunk.content);
-									} else {
+									await displayBotMessageAsync(messageInMarkdownArray, chatChunk.content);
+									if (chatChunk.is_end) {
 										its_the_end = true;
 									}
 								}
@@ -78,9 +77,8 @@
 							partialChunk = partialChunk.trim();
 							if (partialChunk.length > 0) {
 								const chatChunk = JSON.parse(partialChunk);
-								if (!chatChunk.is_end) {
-									await displayBotMessageAsync(messageInMarkdownArray, chatChunk.content);
-								} else {
+								await displayBotMessageAsync(messageInMarkdownArray, chatChunk.content);
+								if (chatChunk.is_end) {
 									its_the_end = true;
 								}
 							}
@@ -211,8 +209,8 @@
 			  name="prompt"
 			  id="prompt"
 			  placeholder="Write a message..."
-			  rows="1"
-	/>
+			  rows="1">
+	</textarea>
 	<button class="variant-filled-primary bg-blue-500 text-white p-2
 						rounded-lg"
 			on:click={handleClick}>Send</button>

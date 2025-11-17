@@ -1,7 +1,7 @@
 <!-- /frontend/src/components/Login.svelte -->
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { login, logout, authentication } from '../stores/auth.store'
+	import { login, logout, authentication } from '../stores/auth.store.ts'
 	import type { User} from 'firebase/auth';
 
 	let user: User | null = null;

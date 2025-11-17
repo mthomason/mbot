@@ -14,7 +14,8 @@
 		".svelte-kit",
 		"docs/_config.yml",
 		"docs/Gemfile.lock",
-		"docs/Gemfile"
+		"docs/Gemfile",
+		"frontend/tsconfig.json"
 
 	],
 	"cSpell.words": [

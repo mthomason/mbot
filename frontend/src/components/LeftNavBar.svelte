@@ -1,6 +1,6 @@
 <!-- /frontend/src/components/LeftNavBar.svelte -->
 <script lang="ts">
-	import { drawerStore } from '@skeletonlabs/skeleton';
+	import { Dialog } from '@skeletonlabs/skeleton-svelte';
 
 	let items: {title: string; content: string; anchor: string; }[] = [
 		{ title: 'Home', content: 'Home', anchor: '/' },
@@ -10,20 +10,17 @@
 		{ title: 'About', content: 'About', anchor: '/about' },
 	];
 
-	function drawerClose(): void {
-		drawerStore.close();
-	}
-
 </script>
 
 <nav class="list-nav p-4">
 	<ul>
 		{#each items as item (item.title)}
 			<li>
-				<a href="{item.anchor}" title="{item.title}"
-				   on:click={drawerClose}>
-					{item.content}
-				</a>
+				<Dialog.CloseTrigger>
+					<a href="{item.anchor}" title="{item.title}">
+						{item.content}
+					</a>
+				</Dialog.CloseTrigger>
 			</li>
 		{/each}
 	</ul>

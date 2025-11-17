@@ -1,8 +1,12 @@
+import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 
 /** @type {import('vite').UserConfig} */
 const config = {
-	plugins: [sveltekit()],
+	plugins: [
+		tailwindcss(),
+		sveltekit()
+	],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}
