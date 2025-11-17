@@ -5,14 +5,12 @@
 	let isDark = false;
 
 	onMount(() => {
-		// Get stored preference, or default to system
-		const stored = localStorage.getItem('theme');
+		const stored = localStorage.getItem('mode');
 		if (stored === 'dark') {
 			isDark = true;
 		} else if (stored === 'light') {
 			isDark = false;
 		} else {
-			// No stored preference — use OS preference
 			isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 		}
 		applyTheme(isDark);
@@ -24,13 +22,9 @@
 	}
 
 	function applyTheme(dark: boolean) {
-		if (dark) {
-			document.documentElement.classList.add('dark');
-			localStorage.setItem('theme', 'dark');
-		} else {
-			document.documentElement.classList.remove('dark');
-			localStorage.setItem('theme', 'light');
-		}
+		const mode = dark ? 'dark' : 'light';
+		document.documentElement.setAttribute('data-mode', mode);
+		localStorage.setItem('mode', mode);
 	}
 </script>
 

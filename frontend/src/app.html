@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		%sveltekit.head%
+		<script>
+			const storedTheme = localStorage.getItem('mode');
+			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			const mode = storedTheme || (prefersDark ? 'dark' : 'light');
+			document.documentElement.setAttribute('data-mode', mode);
+		</script>
 	</head>
 	<body data-theme="hamlindigo" data-sveltekit-preload-data="hover">
 		<div id="app" style="display: contents" class="h-full overflow-hidden">%sveltekit.body%</div>
