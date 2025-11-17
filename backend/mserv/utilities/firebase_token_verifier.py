@@ -6,6 +6,8 @@ from jose import jwt, JWTError, JOSEError
 import requests
 from typing import Optional, Any
 from fastapi import HTTPException
+from cryptography.x509 import load_pem_x509_certificate
+from cryptography.hazmat.backends import default_backend
 
 class FirebaseTokenVerifier:
 	GOOGLE_CERTS_URL: str
@@ -23,37 +25,31 @@ class FirebaseTokenVerifier:
 		response.raise_for_status()
 		return response.json()
 
-	#def _fetch_google_certs(self) -> dict:
-	#	return requests.get(self.GOOGLE_CERTS_URL).json()
-
 	def decode_token(self, token: str) -> dict[str, Any]:
-		certs: dict[str, str] = self._fetch_google_certs()
-		
-		# Extract the Key ID from the JWT header without verification
+		certs = self._fetch_google_certs()
+
 		unverified_header = jwt.get_unverified_header(token)
-		kid: str = unverified_header['kid']
-		auth_algorithm: str = unverified_header['alg']
+		kid = unverified_header['kid']
+		alg = unverified_header['alg']
 
-		# Find the key we need based on the Key ID
 		if kid not in certs:
-			raise ValueError('Key ID from token not found in Google certs.')
-		key: str = certs[kid]
+			raise ValueError("Key ID not found in Google certs")
 
-		try:
-			decoded_token = jwt.decode(
-				token=token,
-				key=key,
-				algorithms=[auth_algorithm],
-				audience=self.project_id,
-				issuer=self.GOOGLE_ISSUER
-			)
-			return decoded_token
-		except JWTError as e:
-			raise HTTPException(status_code=401, detail=str(e))
-		except JOSEError as e:
-			raise HTTPException(status_code=401, detail=str(e))
-		except Exception as e:
-			raise HTTPException(status_code=500, detail="Internal server error")
+		# Load the certificate
+		cert_str = certs[kid].encode("utf-8")
+		cert_obj = load_pem_x509_certificate(cert_str, default_backend())
+
+		# Extract the public key
+		public_key = cert_obj.public_key()
+
+		decoded_token = jwt.decode(
+			token=token,
+			key=public_key, # type: ignore[arg-type]
+			algorithms=[alg],
+			audience=self.project_id,
+			issuer=self.GOOGLE_ISSUER
+		)
+		return decoded_token
 	
 	def get_user_id(self, token: str) -> Optional[str]:
 		decoded_token = self.decode_token(token)
