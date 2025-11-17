@@ -16,6 +16,14 @@ import openai
 
 OPENAI_PREVIEW: bool = True
 
+# Load the AI_MODEL_CHAT_FAST key
+AI_MODEL_CHAT_FAST: str = os.getenv("AI_MODEL_CHAT_FAST", default="")
+if not AI_MODEL_CHAT_FAST:
+	AI_MODEL_CHAT_FAST = "gpt-4o-mini"
+
+# Load the OpenAI API base URL from the environment variables
+OPENAI_BASE_URL: str = os.getenv("OPENAI_BASE_URL_MBOT", default="")
+
 # Load the OpenAI API key from the environment variables
 OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY_MBOT", default="")
 if OPENAI_API_KEY == "":
@@ -30,7 +38,18 @@ router: APIRouter = APIRouter()
 if router is None:
 	raise Exception("Failed to initialize API router")
 
-async_openai_client: openai.AsyncOpenAI = openai.AsyncClient(api_key=OPENAI_API_KEY)
+async_openai_client: openai.AsyncOpenAI
+
+if not OPENAI_BASE_URL:
+	async_openai_client = openai.AsyncClient(
+		api_key=OPENAI_API_KEY
+	)
+else:
+	async_openai_client = openai.AsyncClient(
+		base_url=OPENAI_BASE_URL,
+		api_key=OPENAI_API_KEY
+	)
+
 if async_openai_client is None:
 	raise Exception("Failed to initialize OpenAI client")
 
@@ -46,7 +65,7 @@ class ChatResponse(BaseModel):
 
 async def get_chat_response_async(message: str) -> openai.AsyncStream[ChatCompletionChunk] | None:
 	return await async_openai_client.chat.completions.create(
-					model = "gpt-4o-mini",
+					model = AI_MODEL_CHAT_FAST,
 					messages = [
 						{"role": "system", "content": "You are a helpful assistant."},
 						{"role": "user", "content": message},
@@ -67,12 +86,16 @@ def handle_openai_status_error(e: openai.APIStatusError, user_id: str) -> Genera
 async def get_current_user_id(request: Request) -> str:
 	auth_token: str | None = request.headers.get('Authorization')
 	if not auth_token:
-		raise HTTPException(status_code=401, detail="Token is mis sing")
+		raise HTTPException(status_code=401, detail="Token is missing")
 
 	auth_token = auth_token.replace("Bearer ", "")
 
 	verifier: FirebaseTokenVerifier = FirebaseTokenVerifier(GOOGLE_PROJECT_ID)
-	user_id: Optional[str] = verifier.get_user_id(auth_token)
+	try:
+		user_id: Optional[str] = verifier.get_user_id(auth_token)
+	except Exception as inst:
+		print(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+		print(inst)
 
 	if user_id is None:
 		raise HTTPException(status_code=401, detail="User not authenticated")
