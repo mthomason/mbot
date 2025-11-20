@@ -114,7 +114,9 @@ docs/             # Documentation files
 
 ## Environment Variables
 
-To configure your environment variables, create a `.env` file in the root directory of the project with the following structure:
+### Step 1: Backend Environment Variables
+
+To configure your *backend* environment variables, create a `.env` file in the *__root__ directory* of the project with the following structure:
 
 ```bash
 # Used for Firebase authentication
@@ -126,6 +128,26 @@ OPENAI_API_KEY_MBOT=sk-xxxxxxxxxxxxxxxxxxxx
 
 - **GOOGLE_PROJECT_ID_MBOT**: Your Firebase project ID, used for authentication.
 - **OPENAI_API_KEY_MBOT**: Your API key for OpenAI services. Remember that usage may incur costs.
+
+### Step 2: Frontend Environment Variables
+
+To configure the *frontend* environment variables, create a `.env` file in the *__`frontend`__ directory* of the project with the following structure:
+
+```bash
+# These values are given to you by Google when
+#   You create a new Firebase project.
+#   They will be in the form of a .JSON file.
+#   It's your Firebase Project config information for auth.
+VITE_FIREBASE_API_KEY=ABCDEFGHIJKLMNOPQRSTUVWXYZA-12345678901
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=my-firebase-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=777777777777
+VITE_FIREBASE_APP_ID=1:777777777777:web:3333333333333333333333
+VITE_FIREBASE_MEASUREMENT_ID=G-ABCDEF7890
+```
+
+Note that `VITE_FIREBASE_PROJECT_ID` is the same value as `GOOGLE_PROJECT_ID_MBOT` in the backend.
 
 ## Running the Project
 

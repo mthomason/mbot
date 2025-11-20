@@ -6,15 +6,16 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut,
 import { initializeApp, getApp, getApps,
 	type FirebaseOptions, type FirebaseApp
 } from "firebase/app";
+import "@sveltejs/kit"
 
 const firebaseConfig: FirebaseOptions = {
-	apiKey: "AIzaSyABNk9oM5G2gZZy0_XrKAT-eAPI7q6feLs",
-	authDomain: "mbotfbase.firebaseapp.com",
-	projectId: "mbotfbase",
-	storageBucket: "mbotfbase.appspot.com",
-	messagingSenderId: "311121570177",
-	appId: "1:311121570177:web:e6472526cb1d1eedaba080",
-	measurementId: "G-5GXRMHKLR5"
+	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+	authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+	projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+	storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+	messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+	appId: import.meta.env.VITE_FIREBASE_APP_ID,
+	measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 const firebaseApp: FirebaseApp = (getApps().length === 0) ?
