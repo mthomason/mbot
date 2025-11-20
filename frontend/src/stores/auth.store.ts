@@ -6,7 +6,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut,
 import { initializeApp, getApp, getApps,
 	type FirebaseOptions, type FirebaseApp
 } from "firebase/app";
-import "@sveltejs/kit"
+import "@sveltejs/kit";
 
 const firebaseConfig: FirebaseOptions = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
