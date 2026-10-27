@@ -48,7 +48,8 @@
 	<div class="flex flex-col min-h-screen bg-surface-50 dark:bg-surface-900">
 
 		<!-- Header -->
-		<AppBar class="flex justify-between items-center px-4">
+		<!-- Skeleton's AppBar root defaults to flex-direction: column; force the row layout. -->
+		<AppBar class="flex flex-row! justify-between items-center px-4">
 			<!-- Left side: logo + mobile drawer trigger -->
 			<div class="flex items-center space-x-4">
 				<Dialog.Trigger class="lg:hidden btn btn-sm">
