@@ -1,15 +1,16 @@
 import tailwindcss from '@tailwindcss/vite';
+import adapter from '@sveltejs/adapter-auto';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vitest/config';
 
-/** @type {import('vite').UserConfig} */
-const config = {
+export default defineConfig({
 	plugins: [
 		tailwindcss(),
-		sveltekit()
+		sveltekit({
+			adapter: adapter()
+		})
 	],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}
-};
-
-export default config;
+});

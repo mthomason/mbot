@@ -23,7 +23,7 @@ import MarkdownIt from "markdown-it";
  * messageBuilder.getBlockHtml(1); // "<p>How are you?</p>\n"
  */
 export default class MessageBuilder {
-	markdownDecoder: MarkdownIt;
+	markdownDecoder: InstanceType<typeof MarkdownIt>;
 	tokens: string[];
 	blocks: string[][];
 	/**

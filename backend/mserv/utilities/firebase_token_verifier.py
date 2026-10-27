@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # File: backend/mserv/utilities/mfirebase_token_verifier.py
 
-from jose import jwt, JWTError, JOSEError
+import jwt
 import requests
 from typing import Optional, Any
 from fastapi import HTTPException
@@ -43,7 +43,7 @@ class FirebaseTokenVerifier:
 		public_key = cert_obj.public_key()
 
 		decoded_token = jwt.decode(
-			token=token,
+			token,
 			key=public_key, # type: ignore[arg-type]
 			algorithms=[alg],
 			audience=self.project_id,

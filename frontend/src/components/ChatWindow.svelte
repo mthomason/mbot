@@ -8,7 +8,7 @@
 
 	let chatClient: ChatClient = new ChatClient();
 	let chatWindowElement: HTMLDivElement;
-	const markdownDecoder: MarkdownIt = new MarkdownIt();
+	const markdownDecoder: InstanceType<typeof MarkdownIt> = new MarkdownIt();
 
 	/**
 	 * @function sendChatMessageAsync

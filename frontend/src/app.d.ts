@@ -7,3 +7,9 @@ declare namespace App {
 	// interface PageData {}
 	// interface Platform {}
 }
+
+// Allow side-effect imports of PostCSS files.
+declare module '*.postcss' {
+	const css: string;
+	export default css;
+}

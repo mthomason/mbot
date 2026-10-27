@@ -9,11 +9,11 @@
 This project currently uses the following tools and packages on the frontend:
 
 - [Typescript](https://www.typescriptlang.org/docs/) for programming the frontend
-- [SvelteKit](https://svelte.dev/docs/kit/introduction) v2 for routing
+- [SvelteKit](https://svelte.dev/docs/kit/introduction) v3 for routing
 - [Skeleton](https://www.skeleton.dev/) v4 for theming and components
 - [Tailwind CSS](https://tailwindcss.com/) v4 for style
 - [Firebase](https://firebase.google.com/docs/auth) for authentication
-- [Vite](https://vite.dev/) v7 for building
+- [Vite](https://vite.dev/) v8 for building
 
 The backend is build using the following:
 
