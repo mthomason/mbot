@@ -30,11 +30,11 @@
 		viewportWidth: number;
 	}
 
-	function getPropertyFromString(obj: Object, str: string) : string | null {
+	function getPropertyFromString(obj: object, str: string) : string | null {
 		if (obj == null || str == null || str.length == 0) {
 			throw new Error("Invalid arguments");
 		}
-		return obj.hasOwnProperty(str) ? (obj as any)[str] : null;
+		return Object.prototype.hasOwnProperty.call(obj, str) ? (obj as any)[str] : null;
 	}
 	function getBrowserInfo() : BrowserInfo | null {
 		var browserInfo : BrowserInfo | null = null;
@@ -100,7 +100,7 @@
 		<div class="w-full h-96 bg-center">
 			<ul class="list-none p-0">
 				{#if (browserInfo != null)}
-					{#each Object.entries(browserInfo) as [key, value]}
+					{#each Object.entries(browserInfo) as [key, value] (key)}
 						<li class="my-2"><strong>{key}:</strong> {value}</li>
 					{/each}
 				{:else}

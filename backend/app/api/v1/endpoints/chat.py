@@ -91,11 +91,12 @@ async def get_current_user_id(request: Request) -> str:
 	auth_token = auth_token.replace("Bearer ", "")
 
 	verifier: FirebaseTokenVerifier = FirebaseTokenVerifier(GOOGLE_PROJECT_ID)
+	user_id: Optional[str] = None
 	try:
-		user_id: Optional[str] = verifier.get_user_id(auth_token)
-	except Exception as inst:
-		print(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
-		print(inst)
+		user_id = verifier.get_user_id(auth_token)
+	except Exception:
+		# An invalid or expired token must be a 401, not an unhandled 500.
+		user_id = None
 
 	if user_id is None:
 		raise HTTPException(status_code=401, detail="User not authenticated")

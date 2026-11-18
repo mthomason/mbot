@@ -3,7 +3,7 @@
 # File: backend/mserv/mbot_config.py
 
 import json
-from pydantic import BaseModel, validator, Field
+from pydantic import BaseModel, field_validator, Field
 from typing import List
 
 class MBotConfig(BaseModel):
@@ -13,7 +13,8 @@ class MBotConfig(BaseModel):
 		class ConnectionSettings(BaseModel):
 			allow_origins: List[str] = Field(default_factory=list)
 
-		@validator('log_level', pre=True, always=True)
+		@field_validator('log_level', mode='before')
+		@classmethod
 		def validate_log_level(cls, v):
 			allowed_values = ["debug", "info", "warning", "error", "critical"]
 			if v not in allowed_values:

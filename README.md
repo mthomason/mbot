@@ -1,5 +1,6 @@
 # mbot: For Svelte and FastAPI Chat with OpenAI
 
+[![CI](https://github.com/mthomason/mbot/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mthomason/mbot/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## Overview
@@ -45,9 +46,10 @@ This project is designed for:
 3. [Project Structure](#project-structure)
 4. [Environment Variables](#environment-variables)
 5. [Running the Project](#running-the-project)
-6. [Authentication](#authentication)
-7. [Contributing](#contributing)
-8. [License](#license)
+6. [Testing](#testing)
+7. [Authentication](#authentication)
+8. [Contributing](#contributing)
+9. [License](#license)
 
 ## Getting Started
 
@@ -114,6 +116,9 @@ docs/             # Documentation files
 
 ## Environment Variables
 
+Copy `.env.example` to `.env` in the repo root and `frontend/.env.example` to
+`frontend/.env`, then fill in the values below.
+
 ### Step 1: Backend Environment Variables
 
 To configure your *backend* environment variables, create a `.env` file in the *__root__ directory* of the project with the following structure:
@@ -179,6 +184,50 @@ uvicorn main:fastapi_app --reload
 ```bash
 cd frontend
 npm run dev
+```
+
+## Testing
+
+The `CI` workflow (`.github/workflows/ci.yml`) runs the checks below on every
+push and pull request. You can run the same checks locally.
+
+### Frontend
+
+```bash
+cd frontend
+npm ci
+npm run lint
+npm run check          # svelte-check type checking
+npm run test:unit      # Vitest unit tests
+npm run build
+npm test               # Playwright end-to-end tests
+```
+
+Playwright builds the app and starts a preview server on port 4173
+automatically. If you do not have a `frontend/.env`, copy
+`frontend/.env.example` first.
+
+### Backend
+
+```bash
+pip install -r requirements-dev.txt
+cd backend
+python -m pytest
+```
+
+### Docs
+
+```bash
+cd docs
+bundle exec jekyll build
+```
+
+### Security audits
+
+```bash
+cd frontend && npm audit --omit=dev --audit-level=high
+pip-audit -r requirements.txt
+cd docs && bundler-audit check --update
 ```
 
 ## Authentication

@@ -56,7 +56,7 @@ export default class MessageBuilder {
 	 * @param {string[]} tokens
 	 */
 	addTokens(...tokens: string[]) {
-		tokens.forEach(this.addToken);
+		for (const token of tokens) this.addToken(token);
 	}
 
 	/**
@@ -91,7 +91,7 @@ export default class MessageBuilder {
 	 * @returns {string}
 	 */
 	decorateMessageBlock(blockIndex: number): string {
-		let blockHtml = this.getBlockHtml(blockIndex);
+		const blockHtml = this.getBlockHtml(blockIndex);
 		return `<p class="message-block">${blockHtml}</p>`;
 	}
 	
@@ -101,7 +101,7 @@ export default class MessageBuilder {
 	 * @returns {string}
 	 * */
 	getHtml(): string {
-		let results = [""];
+		const results = [""];
 		for (let i = 0; i < this.blocks.length; i++) {
 			results.push(this.decorateMessageBlock(i));
 		}

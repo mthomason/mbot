@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-
 import { writable, type Writable } from "svelte/store";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut,
 	type Auth, type User, type UserCredential, } from "firebase/auth";

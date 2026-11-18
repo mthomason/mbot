@@ -31,7 +31,7 @@
 					{ role: "user", content: chatClient.userChatPrompt }];
 			chatClient.userChatPrompt = "";
 
-			if (!ReadableStreamDefaultReader.prototype.hasOwnProperty(Symbol.asyncIterator)) {
+			if (!Object.prototype.hasOwnProperty.call(ReadableStreamDefaultReader.prototype, Symbol.asyncIterator)) {
 				Object.defineProperty(ReadableStreamDefaultReader.prototype, Symbol.asyncIterator, {
 					get() {
 						return this;
