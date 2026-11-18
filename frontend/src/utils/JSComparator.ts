@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export class JSComparator {
 	static isString(value: any): boolean {
 		return typeof value === 'string';

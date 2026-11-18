@@ -13,8 +13,6 @@
 	const animBackdrop = 'transition transition-discrete opacity-0 starting:data-[state=open]:opacity-0 data-[state=open]:opacity-100';
 	const animDrawer = 'transition transition-discrete opacity-0 -translate-x-full starting:data-[state=open]:opacity-0 starting:data-[state=open]:-translate-x-full data-[state=open]:opacity-100 data-[state=open]:translate-x-0';
 
-	let tag = "div";
-
 </script>
 
 <!-- Drawer (mobile sidebar) -->
@@ -85,10 +83,3 @@
 
 	</div>
 </Dialog>
-
-<style>
-	.login-block {
-		display: flex;
-		align-items: center;
-	}
-</style>

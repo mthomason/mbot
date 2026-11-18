@@ -1,3 +1,4 @@
+import typography from '@tailwindcss/typography';
 
 export default {
 	darkMode: ['attr', 'data-mode'],
@@ -9,6 +10,6 @@ export default {
 		extend: {}
 	},
 	plugins: [
-		require('@tailwindcss/typography')
+		typography
 	]
 };

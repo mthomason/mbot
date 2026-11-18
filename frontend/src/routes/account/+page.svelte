@@ -1,8 +1,8 @@
 <!-- /frontend/src/routes/about/+page.svelte -->
 <script lang="ts">
 	import type { User} from 'firebase/auth';
-	import { onMount, onDestroy } from 'svelte';
-	import { login, logout, authentication } from '../../stores/auth.store'
+	import { onDestroy } from 'svelte';
+	import { logout, authentication } from '../../stores/auth.store'
     import Login from '../../components/Login.svelte';
 	
 	let user: User | null = null;

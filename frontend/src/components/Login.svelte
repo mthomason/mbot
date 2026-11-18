@@ -1,6 +1,6 @@
 <!-- /frontend/src/components/Login.svelte -->
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import { login, logout, authentication } from '../stores/auth.store.ts'
 	import type { User} from 'firebase/auth';
 
@@ -24,9 +24,8 @@
 		showTooltip = false;
 	}
 
-	function onClickInside(e: MouseEvent & { currentTarget: EventTarget & HTMLDivElement; }) {
+	function onClickInside() {
 		showTooltip = !showTooltip;
-		//e.stopPropagation();
 	}
 
 	function onKeydown(e: KeyboardEvent & { currentTarget: EventTarget & HTMLDivElement; }) {
