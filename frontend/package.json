@@ -24,7 +24,7 @@
 		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "^4.3.3",
 		"autoprefixer": "^10.4.21",
-		"eslint": "^9.39.5",
+		"eslint": "^10.15.0",
 		"eslint-plugin-svelte": "^3.24.1",
 		"globals": "^17.14.0",
 		"svelte": "^5.57.3",
