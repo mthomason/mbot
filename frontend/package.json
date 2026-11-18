@@ -39,7 +39,7 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "^0.554.0",
-		"@skeletonlabs/skeleton-svelte": "^4.3.4",
+		"@skeletonlabs/skeleton-svelte": "^5.0.4",
 		"firebase": "^13.1.0",
 		"markdown-it": "^15.0.3"
 	},
