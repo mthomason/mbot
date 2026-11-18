@@ -38,7 +38,7 @@
 		"vitest": "^5.0.5"
 	},
 	"dependencies": {
-		"@lucide/svelte": "^0.554.0",
+		"@lucide/svelte": "^1.73.0",
 		"@skeletonlabs/skeleton-svelte": "^4.3.4",
 		"firebase": "^13.1.0",
 		"markdown-it": "^15.0.3"
